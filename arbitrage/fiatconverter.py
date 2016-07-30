@@ -55,6 +55,7 @@ class FiatConverter:
             self.rates[code_to] = rate
 
     def update(self):
+        return
         timediff = time.time() - self.last_update
         if timediff < self.update_delay:
             return

@@ -21,7 +21,8 @@ class Market:
 
     def buy(self, amount, price):
         """Orders are always priced in USD"""
-        local_currency_price = self.fc.convert(price, "USD", self.currency)
+        #local_currency_price = self.fc.convert(price, "USD", self.currency)
+        local_currency_price=price;
         logging.info("Buy %f BTC at %f %s (%f USD) @%s" % (amount,
                      local_currency_price, self.currency, price, self.name))
         self._buy(amount, local_currency_price)
@@ -29,7 +30,8 @@ class Market:
 
     def sell(self, amount, price):
         """Orders are always priced in USD"""
-        local_currency_price = self.fc.convert(price, "USD", self.currency)
+        #local_currency_price = self.fc.convert(price, "USD", self.currency)
+        local_currency_price=price;
         logging.info("Sell %f BTC at %f %s (%f USD) @%s" % (amount,
                      local_currency_price, self.currency, price, self.name))
         self._sell(amount, local_currency_price)

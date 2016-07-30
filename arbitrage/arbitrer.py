@@ -6,6 +6,7 @@ import config
 import time
 import logging
 import json
+import sys
 from concurrent.futures import ThreadPoolExecutor, wait
 
 
@@ -17,6 +18,7 @@ class Arbitrer(object):
         self.init_markets(config.markets)
         self.init_observers(config.observers)
         self.threadpool = ThreadPoolExecutor(max_workers=10)
+        self.filename="result.json"
 
     def init_markets(self, markets):
         self.market_names = markets
@@ -106,6 +108,82 @@ class Arbitrer(object):
         return i, j
 
     def arbitrage_depth_opportunity(self, kask, kbid):
+        #maxi, maxj = self.get_max_depth(kask, kbid)
+        askIndex=0
+        bidIndex=0
+        buyamount=0
+        sellamount=0
+        buyCost=0
+        sellCost=0
+        tradePrice=0
+        buyAveragePrice=0
+        sellAveragePrice=0
+
+        while(self.depths[kask]["asks"][askIndex]['price']\
+            < self.depths[kbid]["bids"][bidIndex]['price']):
+           
+            if buyamount<sellamount:
+                buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
+                buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
+                askIndex+=1
+
+                tradePrice=self.depths[kask]["bids"][bidIndex]['price']
+                if askIndex>=len(self.depths[kask]["asks"]):
+                    break
+            else:
+
+                sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
+                sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
+                test=sellCost/sellamount
+                bidIndex+=1
+                tradePrice=self.depths[kask]["asks"][askIndex]['price']
+                if bidIndex>=len(self.depths[kbid]["bids"]):
+                    break
+        if buyamount!=0:
+            buyAveragePrice=buyCost/buyamount
+        if sellamount!=0:
+            sellAveragePrice=sellCost/sellamount
+
+        tradeAmount=min(buyamount,sellamount)
+        maxProfit=(sellAveragePrice-buyAveragePrice)*tradeAmount
+        return maxProfit,tradeAmount,\
+            tradePrice,tradePrice,\
+            buyAveragePrice,sellAveragePrice
+
+    def arbitrage_opportunity2(self, kask, ask, kbid, bid):
+        #print("===>arbitrage")
+        perc = (bid["price"] - ask["price"]) / bid["price"] * 100
+        #print(time.time())
+        profit, volume, buyprice, sellprice, weighted_buyprice,\
+            weighted_sellprice = self.arbitrage_depth_opportunity(kask, kbid)
+        if volume == 0 or buyprice == 0:
+            return
+        perc2 = (1 - (volume - (profit / buyprice)) / volume) * 100
+        for observer in self.observers:
+            observer.opportunity(
+                profit, volume, buyprice, kask, sellprice, kbid,
+                perc2, weighted_buyprice, weighted_sellprice)
+    def arbitrage_opportunity(self, kask, ask, kbid, bid):
+        #print("===>arbitrage")
+        #lastime=time.time();
+        perc = (bid["price"] - ask["price"]) / bid["price"] * 100
+        #print(time.time())
+                
+        
+        profit, volume, buyprice, sellprice, weighted_buyprice,\
+            weighted_sellprice = self.arbitrage_depth_opportunity(kask, kbid)
+        #print("333344444====================%f"%(time.time()-lastime))
+        lastime=time.time();
+        if volume == 0 or buyprice == 0:
+            return
+        perc2 = (1 - (volume - (profit / buyprice)) / volume) * 100
+        for observer in self.observers:
+            observer.opportunity(
+                profit, volume, buyprice, kask, sellprice, kbid,
+                perc2, weighted_buyprice, weighted_sellprice)
+        #print("3********************=%f"%(time.time()-lastime))
+
+    def arbitrage_depth_opportunity2(self, kask, kbid):
         maxi, maxj = self.get_max_depth(kask, kbid)
         best_profit = 0
         best_i, best_j = (0, 0)
@@ -125,19 +203,6 @@ class Arbitrer(object):
                self.depths[kask]["asks"][best_i]["price"], \
                self.depths[kbid]["bids"][best_j]["price"], \
                best_w_buyprice, best_w_sellprice
-
-    def arbitrage_opportunity(self, kask, ask, kbid, bid):
-        perc = (bid["price"] - ask["price"]) / bid["price"] * 100
-        profit, volume, buyprice, sellprice, weighted_buyprice,\
-            weighted_sellprice = self.arbitrage_depth_opportunity(kask, kbid)
-        if volume == 0 or buyprice == 0:
-            return
-        perc2 = (1 - (volume - (profit / buyprice)) / volume) * 100
-        for observer in self.observers:
-            observer.opportunity(
-                profit, volume, buyprice, kask, sellprice, kbid,
-                perc2, weighted_buyprice, weighted_sellprice)
-
     def __get_market_depth(self, market, depths):
         depths[market.name] = market.get_depth()
 
@@ -162,7 +227,12 @@ class Arbitrer(object):
         files = os.listdir(directory)
         files.sort()
         for f in files:
-            depths = json.load(open(directory + '/' + f, 'r'))
+            if ".json" not in f:
+                continue
+            print(f)
+            jsonhandle=open(directory + '/' + f, 'r')
+            print(type(jsonhandle))
+            depths = json.load(jsonhandle)
             self.depths = {}
             for market in self.market_names:
                 if market in depths:
@@ -170,11 +240,12 @@ class Arbitrer(object):
             self.tick()
 
     def tick(self):
+        lastime=time.time()
         for observer in self.observers:
             observer.begin_opportunity_finder(self.depths)
-
         for kmarket1 in self.depths:
             for kmarket2 in self.depths:
+                ##print(kmarket1,kmarket2)
                 if kmarket1 == kmarket2:  # same market
                     continue
                 market1 = self.depths[kmarket1]
@@ -185,13 +256,25 @@ class Arbitrer(object):
                        < float(market2["bids"][0]['price']):
                         self.arbitrage_opportunity(kmarket1, market1["asks"][0],
                                                    kmarket2, market2["bids"][0])
-
         for observer in self.observers:
             observer.end_opportunity_finder()
-
+        #print("333=#@$$%%==========%f"%(time.time()-lastime))
     def loop(self):
+        ##print("loop===")
+        f=open(self.filename, 'w')  
+        looptime=0
         while True:
+            #looptime=looptime+1
+            #if looptime >20:
+               # break
+            for observer in self.observers:
+     
+                   observer.update_balance()
             self.depths = self.update_depths()
-            self.tickers()
+            ##f.write(json.dumps(self.depths))
+            #print(self.depths)
+            #tikers=self.tickers()
             self.tick()
+            ##print(config.refresh_rate)
             time.sleep(config.refresh_rate)
+        f.close()

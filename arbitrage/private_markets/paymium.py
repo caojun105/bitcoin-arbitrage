@@ -92,4 +92,4 @@ class PrivatePaymium(Market):
 if __name__ == "__main__":
     market = PrivatePaymium()
     market.get_info()
-    print(market)
+    #print(market)

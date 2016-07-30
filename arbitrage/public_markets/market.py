@@ -38,7 +38,7 @@ class Market(object):
     def ask_update_depth(self):
         try:
             self.update_depth()
-            self.convert_to_usd()
+            #self.convert_to_usd()
             self.depth_updated = time.time()
         except (urllib.error.HTTPError, urllib.error.URLError) as e:
             logging.error("HTTPError, can't update market: %s" % self.name)

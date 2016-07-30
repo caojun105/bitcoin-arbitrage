@@ -7,6 +7,7 @@ import public_markets
 import glob
 import os
 import inspect
+import sys
 from arbitrer import Arbitrer
 
 
@@ -25,7 +26,8 @@ class ArbitrerCLI:
             self.arbitrer.loop()
         if "replay-history" in args.command:
             self.create_arbitrer(args)
-            self.arbitrer.replay_history(args.replay_history)
+            dic=sys.path[0]
+            self.arbitrer.replay_history(dic)
         if "get-balance" in args.command:
             self.get_balance(args)
         if "list-public-markets" in args.command:

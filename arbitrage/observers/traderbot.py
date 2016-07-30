@@ -4,18 +4,20 @@ import time
 from .observer import Observer
 from .emailer import send_email
 from fiatconverter import FiatConverter
-
-
+from private_markets import huobicny,okcoincny
 class TraderBot(Observer):
     def __init__(self):
         self.clients = {
             # TODO: move that to the config file
             # "BitstampUSD": bitstampusd.PrivateBitstampUSD(),
+            "HuobiCNY":huobicny.PrivateHuobiCNY(),
+            "OKCoinCNY":okcoincny.PrivateOkCoinCNY()
         }
         self.fc = FiatConverter()
-        self.trade_wait = 120  # in seconds
+        self.trade_wait = 15  # in seconds
         self.last_trade = 0
         self.potential_trades = []
+        self.update_balance()
 
     def begin_opportunity_finder(self, depths):
         self.potential_trades = []
@@ -26,7 +28,8 @@ class TraderBot(Observer):
         self.potential_trades.sort(key=lambda x: x[0])
         # Execute only the best (more profitable)
         self.execute_trade(*self.potential_trades[0][1:])
-
+        # Update client balance
+        #self.update_balance()
     def get_min_tradeable_volume(self, buyprice, usd_bal, btc_bal):
         min1 = float(usd_bal) / ((1 + config.balance_margin) * buyprice)
         min2 = float(btc_bal) / (1 + config.balance_margin)
@@ -38,7 +41,7 @@ class TraderBot(Observer):
 
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
-        if profit < config.profit_thresh or perc < config.perc_thresh:
+        if 100*profit < config.profit_thresh or 100*perc < config.perc_thresh:
             logging.verbose("[TraderBot] Profit or profit percentage lower than"+
                             " thresholds")
             return
@@ -52,17 +55,16 @@ class TraderBot(Observer):
             return
         volume = min(config.max_tx_volume, volume)
 
-        # Update client balance
-        self.update_balance()
+
         max_volume = self.get_min_tradeable_volume(buyprice,
-                                                   self.clients[kask].usd_balance,
+                                                   self.clients[kask].cny_balance,
                                                    self.clients[kbid].btc_balance)
         volume = min(volume, max_volume, config.max_tx_volume)
         if volume < config.min_tx_volume:
             logging.warn("Can't automate this trade, minimum volume transaction"+
                          " not reached %f/%f" % (volume, config.min_tx_volume))
             logging.warn("Balance on %s: %f USD - Balance on %s: %f BTC"
-                         % (kask, self.clients[kask].usd_balance, kbid,
+                         % (kask, self.clients[kask].cny_balance, kbid,
                             self.clients[kbid].btc_balance))
             return
         current_time = time.time()

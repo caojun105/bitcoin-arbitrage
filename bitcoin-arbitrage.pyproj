@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d24d85b7-331b-42fe-b8e6-1949a7dbbaf0}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>arbitrage\arbitrage.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>3.4</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="arbitrage\arbitrage.py" />
+    <Compile Include="arbitrage\arbitrer.py" />
+    <Compile Include="arbitrage\config.py" />
+    <Compile Include="arbitrage\fiatconverter.py" />
+    <Compile Include="arbitrage\lib\broker_api.py" />
+    <Compile Include="arbitrage\lib\exchange.py" />
+    <Compile Include="arbitrage\lib\helpers.py" />
+    <Compile Include="arbitrage\lib\settings.py" />
+    <Compile Include="arbitrage\lib\__init__.py" />
+    <Compile Include="arbitrage\observers\balancedumper.py" />
+    <Compile Include="arbitrage\observers\detailedlogger.py" />
+    <Compile Include="arbitrage\observers\emailer.py" />
+    <Compile Include="arbitrage\observers\hedgerbot.py" />
+    <Compile Include="arbitrage\observers\historydumper.py" />
+    <Compile Include="arbitrage\observers\logger.py" />
+    <Compile Include="arbitrage\observers\marketmaker.py" />
+    <Compile Include="arbitrage\observers\observer.py" />
+    <Compile Include="arbitrage\observers\specializedtraderbot.py" />
+    <Compile Include="arbitrage\observers\traderbot.py" />
+    <Compile Include="arbitrage\observers\traderbotsim.py" />
+    <Compile Include="arbitrage\observers\xmppmessager.py" />
+    <Compile Include="arbitrage\observers\__init__.py" />
+    <Compile Include="arbitrage\private_markets\bitstampusd.py" />
+    <Compile Include="arbitrage\private_markets\haobtccny.py" />
+    <Compile Include="arbitrage\private_markets\huobicny.py" />
+    <Compile Include="arbitrage\private_markets\market.py" />
+    <Compile Include="arbitrage\private_markets\okcoincny.py" />
+    <Compile Include="arbitrage\private_markets\paymium.py" />
+    <Compile Include="arbitrage\private_markets\__init__.py" />
+    <Compile Include="arbitrage\public_markets\bitfinexusd.py" />
+    <Compile Include="arbitrage\public_markets\bitstampusd.py" />
+    <Compile Include="arbitrage\public_markets\btcccny.py" />
+    <Compile Include="arbitrage\public_markets\btceeur.py" />
+    <Compile Include="arbitrage\public_markets\btceusd.py" />
+    <Compile Include="arbitrage\public_markets\campbxusd.py" />
+    <Compile Include="arbitrage\public_markets\coinbaseusd.py" />
+    <Compile Include="arbitrage\public_markets\geminiusd.py" />
+    <Compile Include="arbitrage\public_markets\haobtccny.py" />
+    <Compile Include="arbitrage\public_markets\huobicny.py" />
+    <Compile Include="arbitrage\public_markets\krakeneur.py" />
+    <Compile Include="arbitrage\public_markets\krakenusd.py" />
+    <Compile Include="arbitrage\public_markets\market.py" />
+    <Compile Include="arbitrage\public_markets\okcoincny.py" />
+    <Compile Include="arbitrage\public_markets\paymiumeur.py" />
+    <Compile Include="arbitrage\public_markets\_brokercny.py" />
+    <Compile Include="arbitrage\public_markets\_btcc.py" />
+    <Compile Include="arbitrage\public_markets\_coinbase.py" />
+    <Compile Include="arbitrage\public_markets\_gemini.py" />
+    <Compile Include="arbitrage\public_markets\_huobi.py" />
+    <Compile Include="arbitrage\public_markets\_kraken.py" />
+    <Compile Include="arbitrage\public_markets\_okcoin.py" />
+    <Compile Include="arbitrage\public_markets\__init__.py" />
+    <Compile Include="arbitrage\test\arbitrage_speed_test.py" />
+    <Compile Include="arbitrage\test\arbitrage_test.py" />
+    <Compile Include="arbitrage\utils.py" />
+    <Compile Include="arbitrage\__init__.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="arbitrage\res.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="arbitrage" />
+    <Folder Include="arbitrage\lib" />
+    <Folder Include="arbitrage\observers" />
+    <Folder Include="arbitrage\private_markets" />
+    <Folder Include="arbitrage\public_markets" />
+    <Folder Include="arbitrage\test" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\3.4" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
