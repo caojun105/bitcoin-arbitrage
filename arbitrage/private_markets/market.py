@@ -36,6 +36,20 @@ class Market:
                      local_currency_price, self.currency, price, self.name))
         self._sell(amount, local_currency_price)
 
+    def marketBuy(self, amount):
+        """Orders are always priced in USD"""
+        #local_currency_price = self.fc.convert(price, "USD", self.currency)
+        #local_currency_price=price;
+        logging.info("Buy %f BTC at Market price @%s" % (amount, self.name))
+        self._marketBuy(amount)
+
+    def marketSell(self, amount):
+        """Orders are always priced in USD"""
+        #local_currency_price = self.fc.convert(price, "USD", self.currency)
+        #local_currency_price=price;
+        logging.info("Sell %f BTC at Market price @%s" % (amount, self.name))
+        self._marketSell(amount)
+
     def _buy(self, amount, price):
         raise NotImplementedError("%s.sell(self, amount, price)" % self.name)
 

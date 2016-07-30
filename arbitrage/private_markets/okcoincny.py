@@ -43,6 +43,17 @@ class PrivateOkCoinCNY(Market):
             print(response)
             return False
             raise TradeException(response["error"])
+    def _marketBuy(self,amount):
+        response = self.okcoin.marketBuy(amount)
+        if response and "code" in response:
+            logging.warn("sell ex:%s", response)
+            return False
+
+    def _marketSell(self,amount):
+        response = self.okcoin.marketSell(amount)
+        if response and "code" in response:
+            logging.warn("sell ex:%s", response)
+            return False
 
     def get_info(self):
         """Get balance"""

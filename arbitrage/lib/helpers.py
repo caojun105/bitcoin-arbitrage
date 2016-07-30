@@ -102,7 +102,30 @@ def signature(params):
     m.digest()
     sig=m.hexdigest()
     return sig
+#### from houbi interface
+def createSign(params):
+	params['secret_key'] = SECRET_KEY;
+	params = sorted(params.items(), key=lambda d:d[0], reverse=False)
+	message = urllib.parse.urlencode(params)
+	message=message.encode(encoding='UTF8')
+	m = hashlib.md5()
+	m.update(message)
+	m.digest()
+	sig=m.hexdigest()
+	return sig
 
+def httpRequest(url, params):
+	postdata = urllib.parse.urlencode(params)
+	postdata = postdata.encode('utf-8')
+
+	fp = urllib.request.urlopen(url, postdata)
+	if fp.status != 200 :
+		return None
+	else:
+		mybytes = fp.read()
+		mystr = mybytes.decode("utf8")
+		fp.close()
+		return mystr
 
 def requestBody(url,host):
     arr = url.split(host)

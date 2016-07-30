@@ -41,7 +41,7 @@ class TraderBot(Observer):
 
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
-        if 100*profit < config.profit_thresh or 100*perc < config.perc_thresh:
+        if  profit < config.profit_thresh or perc*sellprice < config.perc_thresh:
             logging.verbose("[TraderBot] Profit or profit percentage lower than"+
                             " thresholds")
             return
@@ -84,5 +84,10 @@ class TraderBot(Observer):
                       weighted_sellprice, buyprice, sellprice):
         self.last_trade = time.time()
         logging.info("Buy @%s %f BTC and sell @%s" % (kask, volume, kbid))
-        self.clients[kask].buy(volume, buyprice)
-        self.clients[kbid].sell(volume, sellprice)
+        self.clients[kask].marketBuy(float(format(volume*buyprice,'.2f')))
+        self.clients[kbid].marketSell(float(format(volume,'.4f')))
+        #self.clients[kask].buy(volume, buyprice)
+        #self.clients[kbid].sell(volume, sellprice)
+
+        #self.clients[kbid].marketBuy(float(format(volume*buyprice,'.4f')))
+        #self.clients[kask].marketSell(float(format(volume,'.4f')))

@@ -146,10 +146,11 @@ class exchange:
                 'symbol':'btc_cny',
                 'type':'buy_market'
             }
-            if price:
-                params['price'] = price
+           # if price:
+                #params['price'] = price
+                ####in okcoin, the price means the total cost
             if amount:
-                params['amount'] = amount
+                params['price'] = amount
 
             params['sign'] = buildSign(params,self.secretToken, self.role)
             return httpPost(self.url['host'], body, params)
@@ -165,9 +166,14 @@ class exchange:
                       }
             sign=signature(params)
             params['sign']=sign
-            del params['secret_key']
-            payload = urllib.parse.urlencode(params)
-            r = requestPost(self.url['host'], params=payload)
+            #r = httpRequest('https://api.huobi.com/apiv3', params)
+
+            #del params['secret_key']
+            #payload = urllib.parse.urlencode(params)
+            r = httpRequest("https://"+self.url['host'], params)
+            return r
+            #r = requestPost(self.url['host'], payload)
+            #r = requestPost("https://"+self.url['host'], payload)
             if  r and r.status_code == 200:
                 data = r.json()
                 return data
@@ -186,10 +192,10 @@ class exchange:
             params = {
                 'api_key':self.apikey,
                 'symbol':'btc_cny',
-                'type':'buy_market'
+                'type':'sell_market'
             }
-            if price:
-                params['price'] = price
+            #if price:
+               # params['price'] = price
             if amount:
                 params['amount'] = amount
 
@@ -207,7 +213,10 @@ class exchange:
                       }
             sign=signature(params)
             params['sign']=sign
-            del params['secret_key']
+            ##here break out
+            r = httpRequest("https://"+self.url['host'], params)
+            return r
+            #del params['secret_key']
             payload = urllib.parse.urlencode(params)
             r = requestPost(self.url['host'], params=payload)
             if r and r.status_code == 200:

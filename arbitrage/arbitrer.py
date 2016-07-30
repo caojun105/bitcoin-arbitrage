@@ -121,24 +121,28 @@ class Arbitrer(object):
 
         while(self.depths[kask]["asks"][askIndex]['price']\
             < self.depths[kbid]["bids"][bidIndex]['price']):
-           
-            if buyamount<sellamount:
-                buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
-                buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
-                askIndex+=1
+            try:
+                if buyamount<sellamount:
+                    buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
+                    buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
+                    askIndex+=1
 
-                tradePrice=self.depths[kask]["bids"][bidIndex]['price']
-                if askIndex>=len(self.depths[kask]["asks"]):
-                    break
-            else:
+                    tradePrice=self.depths[kbid]["bids"][bidIndex]['price']
+                    if askIndex>=len(self.depths[kask]["asks"]):
+                        break
+                else:
+                    sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
+                    sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
+                    test=sellCost/sellamount
+                    bidIndex+=1
+                    tradePrice=self.depths[kask]["asks"][askIndex]['price']
+                    if bidIndex>=len(self.depths[kbid]["bids"]):
+                        break
+            except Exception as ex:
+                logging.warn("depth fail%s" % ex)
+                t,v,tb = sys.exc_info()
+                #traceback.print_exc()
 
-                sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
-                sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
-                test=sellCost/sellamount
-                bidIndex+=1
-                tradePrice=self.depths[kask]["asks"][askIndex]['price']
-                if bidIndex>=len(self.depths[kbid]["bids"]):
-                    break
         if buyamount!=0:
             buyAveragePrice=buyCost/buyamount
         if sellamount!=0:

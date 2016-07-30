@@ -43,6 +43,23 @@ class PrivateHuobiCNY(Market):
         if response and "code" in response:
             logging.warn("sell ex:%s", response)
             return False
+    def _marketBuy(self,amount):
+        response = self.huobi.marketBuy(amount)
+        if response and "code" in response:
+            logging.warn("sell ex:%s", response)
+            return False
+        else:
+            if "id" in response:
+                return json.loads(response)['id']
+
+    def _marketSell(self,amount):
+        response = self.huobi.marketSell(amount)
+        if response and "code" in response:
+            logging.warn("sell ex:%s", response)
+            return False
+        else:
+            if "id" in response:
+                return json.loads(response)['id']
 
     def get_info(self):
         """Get balance"""
