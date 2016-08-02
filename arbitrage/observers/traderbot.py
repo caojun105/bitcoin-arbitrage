@@ -28,8 +28,8 @@ class TraderBot(Observer):
         self.potential_trades.sort(key=lambda x: x[0])
         # Execute only the best (more profitable)
         self.execute_trade(*self.potential_trades[0][1:])
-        # Update client balance
-        #self.update_balance()
+        return True
+
     def get_min_tradeable_volume(self, buyprice, usd_bal, btc_bal):
         min1 = float(usd_bal) / ((1 + config.balance_margin) * buyprice)
         min2 = float(btc_bal) / (1 + config.balance_margin)
@@ -84,10 +84,15 @@ class TraderBot(Observer):
                       weighted_sellprice, buyprice, sellprice):
         self.last_trade = time.time()
         logging.info("Buy @%s %f BTC and sell @%s" % (kask, volume, kbid))
-        self.clients[kask].marketBuy(float(format(volume*buyprice,'.2f')))
-        self.clients[kbid].marketSell(float(format(volume,'.4f')))
+        #self.clients[kask].marketBuy(float(format(volume*buyprice,'.2f')))
+        #self.clients[kbid].marketSell(float(format(volume,'.4f')))
         #self.clients[kask].buy(volume, buyprice)
         #self.clients[kbid].sell(volume, sellprice)
 
         #self.clients[kbid].marketBuy(float(format(volume*buyprice,'.4f')))
         #self.clients[kask].marketSell(float(format(volume,'.4f')))
+        volume=float(format(volume,'.4f'))
+        buyprice=float(format(buyprice,'.2f'))
+        sellprice=float(format(sellprice,'.2f'))
+        self.clients[kask].buy(volume, buyprice)
+        self.clients[kbid].sell(volume, sellprice)

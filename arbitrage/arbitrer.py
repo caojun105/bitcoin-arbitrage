@@ -8,17 +8,30 @@ import logging
 import json
 import sys
 from concurrent.futures import ThreadPoolExecutor, wait
-
+import os
 
 class Arbitrer(object):
+    def assure_path_exists(self,path):
+        os.makedirs(path, exist_ok=True)
+        #dir=os.path.abspath(__file__)
+        #if not os.path.exists(dir):
+                #os.makedirs(dir)
+
     def __init__(self):
         self.markets = []
         self.observers = []
         self.depths = {}
         self.init_markets(config.markets)
         self.init_observers(config.observers)
-        self.threadpool = ThreadPoolExecutor(max_workers=10)
-        self.filename="result.json"
+        self.thraedpool = ThreadPoolExecutor(max_workers=10)
+        self.last_depth_update=0
+        self.depthJsonFileDic='depth_json'
+        self.assure_path_exists(self.depthJsonFileDic)
+
+    def dump_depth(self,depthdata):
+        fp= os.path.join(self.depthJsonFileDic,str(int(time.time()))+'.json')
+        with open(fp,'w') as f:
+            json.dump(depthdata,f)
 
     def init_markets(self, markets):
         self.market_names = markets
@@ -213,6 +226,7 @@ class Arbitrer(object):
     def update_depths(self):
         depths = {}
         futures = []
+        self.last_depth_update=time.time()
         for market in self.markets:
             futures.append(self.threadpool.submit(self.__get_market_depth,
                                                   market, depths))
@@ -245,8 +259,11 @@ class Arbitrer(object):
 
     def tick(self):
         lastime=time.time()
+        print("======**%s"%time.time())
         for observer in self.observers:
             observer.begin_opportunity_finder(self.depths)
+        print("%s===="%(time.time()-lastime))
+        print(time.time())
         for kmarket1 in self.depths:
             for kmarket2 in self.depths:
                 ##print(kmarket1,kmarket2)
@@ -256,12 +273,21 @@ class Arbitrer(object):
                 market2 = self.depths[kmarket2]
                 if market1["asks"] and market2["bids"] \
                    and len(market1["asks"]) > 0 and len(market2["bids"]) > 0:
+
                     if float(market1["asks"][0]['price']) \
                        < float(market2["bids"][0]['price']):
+                        print(time.time())
                         self.arbitrage_opportunity(kmarket1, market1["asks"][0],
-                                                   kmarket2, market2["bids"][0])
+                                       kmarket2, market2["bids"][0])
+                        print(time.time())
+                        print("%s===="%(time.time()-lastime))
+        
+        if time.time()-self.last_depth_update>0.2:
+            return  
         for observer in self.observers:
-            observer.end_opportunity_finder()
+            if(observer.end_opportunity_finder()):
+                self.dump_depth(self.depths)
+  
         #print("333=#@$$%%==========%f"%(time.time()-lastime))
     def loop(self):
         ##print("loop===")
@@ -272,8 +298,8 @@ class Arbitrer(object):
             #if looptime >20:
                # break
             for observer in self.observers:
-     
                    observer.update_balance()
+
             self.depths = self.update_depths()
             ##f.write(json.dumps(self.depths))
             #print(self.depths)
