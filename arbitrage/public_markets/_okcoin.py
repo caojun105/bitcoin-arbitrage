@@ -8,7 +8,7 @@ class OKCoin(Market):
     def __init__(self, currency, code):
         super().__init__(currency)
         self.code = code
-        self.update_rate = 30
+        self.update_rate = 1
 
     def update_depth(self):
         url = 'https://www.okcoin.cn/api/depth.do?symbol=' + self.code
@@ -31,3 +31,13 @@ class OKCoin(Market):
         bids = self.sort_and_format(depth['bids'], True)
         asks = self.sort_and_format(depth['asks'], False)
         return {'asks': asks, 'bids': bids}
+
+    def get_tick_timestamp(self):
+        url = 'https://www.okcoin.cn/api/v1/ticker.do?symbol=' + self.code
+        req = urllib.request.Request(url, headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "*/*",
+            "User-Agent": "curl/7.24.0 (x86_64-apple-darwin12.0)"})
+        res = urllib.request.urlopen(req)
+        tickdata = json.loads(res.read().decode('utf8'))
+        return tickdata

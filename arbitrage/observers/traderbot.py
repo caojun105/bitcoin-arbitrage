@@ -14,7 +14,7 @@ class TraderBot(Observer):
             "OKCoinCNY":okcoincny.PrivateOkCoinCNY()
         }
         self.fc = FiatConverter()
-        self.trade_wait = 15  # in seconds
+        self.trade_wait = config.trade_wait  # in seconds
         self.last_trade = 0
         self.potential_trades = []
         self.update_balance()

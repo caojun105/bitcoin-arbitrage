@@ -64,3 +64,5 @@ class Market(object):
 
     def sell(self, price, amount):
         pass
+    def get_tick_timestamp(self):
+        pass
