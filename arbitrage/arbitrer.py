@@ -48,7 +48,8 @@ class Arbitrer(object):
 
         ####################implement later
         with open(fp,'w') as f:
-            f.write('ssss')
+            f.write(str(profit))
+            #f.write('ssss')
             f.close()
             #f.write(str(profit))
     def init_markets(self, markets):

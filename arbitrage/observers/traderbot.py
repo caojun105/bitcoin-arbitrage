@@ -1,6 +1,7 @@
 import logging
 import config
 import time
+import datetime
 from .observer import Observer
 from .emailer import send_email
 from fiatconverter import FiatConverter
@@ -20,7 +21,7 @@ class TraderBot(Observer):
         self.potential_trades = []
         self.update_balance()
         self.profit=0
-     
+        self.exeInfo=''
     def get_observer_name(self):
         return 'TraderBot'
     def begin_opportunity_finder(self, depths):
@@ -116,7 +117,12 @@ class TraderBot(Observer):
         elif kbid=='OKCoinCNY' and kask=='HuobiCNY':
             self.lastTradeType=2
 
-        self.profit+=sellExePrice*volume-buyExePrice*volume
-
+        if sellExePrice and buyExePrice:
+            self.profit+=sellExePrice*volume-buyExePrice*volume
+            curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            str="[%s] TrdeVolume:%f  Buy @%s price %f and sell @%s price %f [%f]\n" % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,self.profit)
+            print(str)
+            self.exeInfo+= str
     def getTotalprofit(self):
-        return self.profit
+        return self.exeInfo
+        #return self.profit
