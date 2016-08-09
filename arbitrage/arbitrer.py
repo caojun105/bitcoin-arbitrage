@@ -10,6 +10,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, wait
 import os
 
+
 class Arbitrer(object):
     def assure_path_exists(self,path):
         os.makedirs(path, exist_ok=True)
@@ -21,18 +22,35 @@ class Arbitrer(object):
         self.markets = []
         self.observers = []
         self.depths = {}
+        self.dumpTickData=config.DUMP_TICKER
         self.init_markets(config.markets)
         self.init_observers(config.observers)
-        self.thraedpool = ThreadPoolExecutor(max_workers=10)
+        self.threadpool = ThreadPoolExecutor(max_workers=10)
         self.last_depth_update=0
         self.depthJsonFileDic='depth_json'
+        self.tickDataFileDic='tikcer'
+        self.accountInfoDumpDic ='dump'
         self.assure_path_exists(self.depthJsonFileDic)
+        self.assure_path_exists(self.tickDataFileDic)
+        self.assure_path_exists(self.accountInfoDumpDic)
+        self.tickerdata=[]
 
     def dump_depth(self,depthdata):
-        fp= os.path.join(self.depthJsonFileDic,str(int(time.time()))+'.json')
+        fp= os.path.join(self.tickDataFileDic,str(int(time.time()))+'.json')
         with open(fp,'w') as f:
             json.dump(depthdata,f)
+    def dumpInfo(self):
+        fp= os.path.join(self.accountInfoDumpDic,str(int(time.time()))+'.txt')
+        profit=0
+        for observer in self.observers:
+            if observer.get_observer_name()=='TraderBot':
+                   profit = observer.getTotalprofit()      
 
+        ####################implement later
+        with open(fp,'w') as f:
+            f.write('ssss')
+            f.close()
+            #f.write(str(profit))
     def init_markets(self, markets):
         self.market_names = markets
         for market_name in markets:
@@ -166,7 +184,56 @@ class Arbitrer(object):
         return maxProfit,tradeAmount,\
             tradePrice,tradePrice,\
             buyAveragePrice,sellAveragePrice
+    def arbitrage_depth_opportunity_offset(self, kask, kbid,offset):
+        #maxi, maxj = self.get_max_depth(kask, kbid)
+        askIndex=0
+        bidIndex=0
+        buyamount=0
+        sellamount=0
+        buyCost=0
+        sellCost=0
+        tradePrice=0
+        buyAveragePrice=0
+        sellAveragePrice=0
 
+        while(self.depths[kask]["asks"][askIndex]['price']\
+            < self.depths[kbid]["bids"][bidIndex]['price']+offset):
+            try:
+                if buyamount<sellamount:
+                    buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
+                    buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
+                    askIndex+=1
+                    tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
+                    tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
+                    #if askIndex>=len(self.depths[kask]["asks"]):
+                        #break
+                else:
+                    sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
+                    sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
+                    test=sellCost/sellamount
+                    bidIndex+=1
+                    tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
+                    tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
+                    #if bidIndex>=len(self.depths[kbid]["bids"]):
+                        #break
+                if bidIndex>=len(self.depths[kbid]["bids"]) or askIndex>=len(self.depths[kask]["asks"]):
+                    break
+            except Exception as ex:
+                logging.warn("depth fail%s" % ex)
+                t,v,tb = sys.exc_info()
+                #traceback.print_exc()
+
+        if buyamount!=0:
+            buyAveragePrice=buyCost/buyamount
+        if sellamount!=0:
+            sellAveragePrice=sellCost/sellamount
+
+        tradeAmount=min(buyamount,sellamount)
+        ### the profit is adjusted
+        maxProfit=(sellAveragePrice+offset-buyAveragePrice)*tradeAmount  
+        return maxProfit,tradeAmount,\
+            tradeBuyPrice,tradeSellPrice,\
+            buyAveragePrice,sellAveragePrice
     def arbitrage_opportunity2(self, kask, ask, kbid, bid):
         #print("===>arbitrage")
         perc = (bid["price"] - ask["price"]) / bid["price"] * 100
@@ -200,6 +267,26 @@ class Arbitrer(object):
                 perc2, weighted_buyprice, weighted_sellprice)
         #print("3********************=%f"%(time.time()-lastime))
 
+    def arbitrage_opportunity_offset(self, kask, ask, kbid, bid,offset):
+        #print("===>arbitrage")
+        #lastime=time.time();
+        ## bid price is adjusted
+        perc = (bid["price"]+ offset - ask["price"]) / bid["price"] * 100
+        #print(time.time())
+                
+        ###means bid maket is plus the offset
+        profit, volume, buyprice, sellprice, weighted_buyprice,\
+            weighted_sellprice = self.arbitrage_depth_opportunity_offset(kask, kbid,offset)
+        #print("333344444====================%f"%(time.time()-lastime))
+        lastime=time.time();
+        if volume == 0 or buyprice == 0:
+            return
+        perc2 = (1 - (volume - (profit / buyprice)) / volume) * 100
+        for observer in self.observers:
+            observer.opportunity(
+                profit, volume, buyprice, kask, sellprice, kbid,
+                perc2, weighted_buyprice, weighted_sellprice)
+        #print("3********************=%f"%(time.time()-lastime))
     def arbitrage_depth_opportunity2(self, kask, kbid):
         maxi, maxj = self.get_max_depth(kask, kbid)
         best_profit = 0
@@ -232,11 +319,23 @@ class Arbitrer(object):
                                                   market, depths))
         wait(futures, timeout=20)
         return depths
+    def get_tickdata(self):
+        tmptick={}
+        for market in self.markets:
+            
+            tmpstr=market.name
+            tmptick[tmpstr]=market.get_tick_timestamp()
+        return tmptick
 
     def tickers(self):
-        for market in self.markets:
-            logging.verbose("ticker: " + market.name + " - " + str(
-                market.get_ticker()))
+        tmptick={}
+        for market in self.markets:      
+            tmpstr=market.name
+            tmptick[tmpstr]=market.get_ticker()
+        return tmptick
+            #return market.get_ticker()
+            #logging.verbose("ticker: " + market.name + " - " + str(
+               # market.get_ticker()))
 
     def replay_history(self, directory):
         import os
@@ -258,12 +357,11 @@ class Arbitrer(object):
             self.tick()
 
     def tick(self):
-        lastime=time.time()
-        print("======**%s"%time.time())
+        #lastime=time.time()
+        #print("======**%s"%time.time())
         for observer in self.observers:
             observer.begin_opportunity_finder(self.depths)
-        print("%s===="%(time.time()-lastime))
-        print(time.time())
+
         for kmarket1 in self.depths:
             for kmarket2 in self.depths:
                 ##print(kmarket1,kmarket2)
@@ -279,32 +377,58 @@ class Arbitrer(object):
                         print(time.time())
                         self.arbitrage_opportunity(kmarket1, market1["asks"][0],
                                        kmarket2, market2["bids"][0])
-                        print(time.time())
-                        print("%s===="%(time.time()-lastime))
+                        #print(time.time())
+                        #print("%s===="%(time.time()-lastime))
         
         if time.time()-self.last_depth_update>0.2:
             return  
         for observer in self.observers:
             if(observer.end_opportunity_finder()):
                 self.dump_depth(self.depths)
-  
-        #print("333=#@$$%%==========%f"%(time.time()-lastime))
+    
+    def tick_offset(self):
+        for observer in self.observers:
+            observer.begin_opportunity_finder(self.depths)
+
+        for kmarket1 in self.depths:
+            for kmarket2 in self.depths:
+                ##print(kmarket1,kmarket2)
+                if kmarket1 == kmarket2:  # same market
+                    continue
+                market1 = self.depths[kmarket1]
+                market2 = self.depths[kmarket2]
+                if market1["asks"] and market2["bids"] \
+                   and len(market1["asks"]) > 0 and len(market2["bids"]) > 0:
+                    if (kmarket1=='HuobiCNY') and (kmarket2=='OKCoinCNY'):
+                         offset=config.MEANVALUE
+                    elif (kmarket1=='OKCoinCNY') and (kmarket2=='HuobiCNY'):
+                         offset=-config.MEANVALUE
+                    if float(market1["asks"][0]['price']) \
+                       < float(market2["bids"][0]['price']+offset):
+                        self.arbitrage_opportunity_offset(kmarket1, market1["asks"][0],
+                                       kmarket2, market2["bids"][0],offset)
+
+        # if current time has elapsed many, return and do nothing.
+        if time.time()-self.last_depth_update>0.2:
+            return  
+        for observer in self.observers:
+            if(observer.end_opportunity_finder()):
+                print('k')
+                #self.dump_depth(self.depths)
+
     def loop(self):
-        ##print("loop===")
-        f=open(self.filename, 'w')  
         looptime=0
         while True:
-            #looptime=looptime+1
-            #if looptime >20:
-               # break
+            if self.dumpTickData:
+                looptime=looptime+1
+                self.tickerdata.append(self.get_tickdata())
+                if looptime>250:
+                    self.dump_depth(self.tickerdata)
+                    self.tickerdata=[]
+                    looptime=0
             for observer in self.observers:
-                   observer.update_balance()
-
+                if observer.get_observer_name()=='TraderBot':
+                   observer.update_balance()            
             self.depths = self.update_depths()
-            ##f.write(json.dumps(self.depths))
-            #print(self.depths)
-            #tikers=self.tickers()
-            self.tick()
-            ##print(config.refresh_rate)
+            self.tick_offset()
             time.sleep(config.refresh_rate)
-        f.close()

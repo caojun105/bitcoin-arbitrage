@@ -9,6 +9,8 @@ class Observer(object, metaclass=abc.ABCMeta):
         pass
     def update_balance(self):
         pass
+    def get_observer_name(self):
+        pass
     ## abstract
     @abc.abstractmethod
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc, weighted_buyprice, weighted_sellprice):

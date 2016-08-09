@@ -40,6 +40,12 @@ def requestPost(url, payload):
             return handle_error('API', r.text)
     except :
         return False
+def buildMySign(params,secretKey):
+    sign = ''
+    for key in sorted(params.keys()):
+        sign += key + '=' + str(params[key]) +'&'
+    data = sign+'secret_key='+secretKey
+    return  hashlib.md5(data.encode("utf8")).hexdigest().upper()
 
 def buildSign(params, secretKey, host='haobtc'):
     if host =='haobtc' or host == 'default':

@@ -9,7 +9,13 @@ import os
 import inspect
 import sys
 from arbitrer import Arbitrer
+import signal
 
+def signal_handler(signal, frame):
+        print('You pressed Ctrl+C!')
+        #self.arbitrer.dumpInfo()
+        cli.arbitrer.dumpInfo()
+        sys.exit(0)
 
 class ArbitrerCLI:
     def __init__(self):
@@ -96,4 +102,7 @@ def main():
     cli.main()
 
 if __name__ == "__main__":
-    main()
+    signal.signal(signal.SIGINT, signal_handler)
+    cli = ArbitrerCLI()
+    cli.main()
+    #main()

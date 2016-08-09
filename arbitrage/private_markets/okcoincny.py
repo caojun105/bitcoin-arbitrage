@@ -35,6 +35,8 @@ class PrivateOkCoinCNY(Market):
             print(response)
             return False
             raise TradeException(response["error"])
+        ### just return the order id, not handle the status
+        return json.loads(response)['order_id']
 
     def _sell(self, amount, price):
         """Create a sell limit order"""
@@ -43,6 +45,7 @@ class PrivateOkCoinCNY(Market):
             print(response)
             return False
             raise TradeException(response["error"])
+        return json.loads(response)['order_id']
     def _marketBuy(self,amount):
         response = self.okcoin.marketBuy(amount)
         if response and "code" in response:
@@ -68,4 +71,19 @@ class PrivateOkCoinCNY(Market):
                 self.btc_frozen =  float(response['info']['funds']['freezed']['btc'])
                 self.cny_frozen =  float(response['info']['funds']['freezed']['cny'])
         return response
+
+    def _orderInfo(self,orderId):
+        oderInfo = self.okcoin.orderInfo(orderId)  ## here return the list value, contains many orders
+        
+        res={'deal_amount':0,'avg_price':0,'status':5}
+        try:
+            response= oderInfo[0]
+            res['deal_amount']=response['deal_amount']
+            res['avg_price']=response['avg_price']
+            res['status']=response['status']
+        except:
+            res={'deal_amount':0,'avg_price':0,'status':5}
+        finally:
+            return res
+
         

@@ -25,7 +25,7 @@ class Market:
         local_currency_price=price;
         logging.info("Buy %f BTC at %f %s (%f USD) @%s" % (amount,
                      local_currency_price, self.currency, price, self.name))
-        self._buy(amount, local_currency_price)
+        return self._buy(amount, local_currency_price)
 
 
     def sell(self, amount, price):
@@ -34,7 +34,7 @@ class Market:
         local_currency_price=price;
         logging.info("Sell %f BTC at %f %s (%f USD) @%s" % (amount,
                      local_currency_price, self.currency, price, self.name))
-        self._sell(amount, local_currency_price)
+        return self._sell(amount, local_currency_price)
 
     def marketBuy(self, amount):
         """Orders are always priced in USD"""
@@ -49,7 +49,9 @@ class Market:
         #local_currency_price=price;
         logging.info("Sell %f BTC at Market price @%s" % (amount, self.name))
         self._marketSell(amount)
-
+    def orderInfo(self,orderId):
+        logging.info("get the orderID %s information"%(orderId))
+        return self._orderInfo(orderId)
     def _buy(self, amount, price):
         raise NotImplementedError("%s.sell(self, amount, price)" % self.name)
 
@@ -64,3 +66,4 @@ class Market:
 
     def get_info(self):
         raise NotImplementedError("%s.sell(self, amount, price)" % self.name)
+

@@ -36,6 +36,8 @@ class PrivateHuobiCNY(Market):
         if response and "code" in response:
             logging.warn("buy ex:%s", response)
             return False
+        elif "id" in response:
+            return response['id']
 
     def _sell(self, amount, price):
         """Create a sell limit order"""
@@ -43,6 +45,8 @@ class PrivateHuobiCNY(Market):
         if response and "code" in response:
             logging.warn("sell ex:%s", response)
             return False
+        elif "id" in response:
+            return json.loads(response)['id']
     def _marketBuy(self,amount):
         response = self.huobi.marketBuy(amount)
         if response and "code" in response:
@@ -80,4 +84,14 @@ class PrivateHuobiCNY(Market):
             traceback.print_exc()
 
             return False
-
+    def _orderInfo(self,orderId):
+        response = self.huobi.orderInfo(orderId)
+        res={'deal_amount':0,'avg_price':0,'status':5}
+        try:
+            res['deal_amount']=response['processed_amount']
+            res['avg_price']=response['processed_price']
+            res['status']=response['status']
+        except:
+            res={'deal_amount':0,'avg_price':0,'status':5}
+        finally:
+            return res

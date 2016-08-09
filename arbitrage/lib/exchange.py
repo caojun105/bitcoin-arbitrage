@@ -103,9 +103,15 @@ class exchange:
                 params['price'] = price
             if amount:
                 params['amount'] = amount
-
-            params['sign'] = buildSign(params,self.secretToken, self.role)
-            return httpPost(self.url['host'], body, params)
+            params['sign'] = buildSign(params,self.secretToken, self.role)  
+            response =httpPost(self.url['host'], body, params) 
+            return response
+            if response:
+                res= json.loads(response)
+                if res['result']:
+                    return res['order_id']
+            return None
+            #return httpPost(self.url['host'], body, params)
 
         if self.role == 'huobi':
             timestamp = int(time.time())
@@ -314,9 +320,15 @@ class exchange:
                 'symbol':'btc_cny',
                 'order_id':id
             }
+            params['sign'] = buildMySign(params,self.secretToken)
+            #params['sign'] = buildSign(params,self.secretToken, self.role)
+            r= httpPost(self.url['host'], body, params)
+            if r:
+                response=json.loads(r)
+                if response['result']:
+                    return response['orders']
 
-            params['sign'] = buildSign(params,self.secretToken, self.role)
-            return httpPost(self.url['host'], body, params)
+            return False
 
         if self.role == 'huobi':
             timestamp = int(time.time())
@@ -328,9 +340,12 @@ class exchange:
                       "id":id}
             sign=signature(params)
             params['sign']=sign
+
+            r = httpRequest("https://"+self.url['host'], params)
+            return json.loads(r)
             del params['secret_key']
             payload = urllib.parse.urlencode(params)
-            r = requestPost(self.url['host'], params=payload)
+            r = requestPost(self.url['host'], payload)
             if  r and r.status_code == 200:
                 data = r.json()
                 return data

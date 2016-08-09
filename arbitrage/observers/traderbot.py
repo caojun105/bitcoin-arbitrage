@@ -16,9 +16,13 @@ class TraderBot(Observer):
         self.fc = FiatConverter()
         self.trade_wait = config.trade_wait  # in seconds
         self.last_trade = 0
+        self.lastTradeType=0  # 0 waitting; 1: buy at huobi sell at ok; 2:buy at ok and sell at huobi  
         self.potential_trades = []
         self.update_balance()
-
+        self.profit=0
+     
+    def get_observer_name(self):
+        return 'TraderBot'
     def begin_opportunity_finder(self, depths):
         self.potential_trades = []
 
@@ -88,11 +92,31 @@ class TraderBot(Observer):
         #self.clients[kbid].marketSell(float(format(volume,'.4f')))
         #self.clients[kask].buy(volume, buyprice)
         #self.clients[kbid].sell(volume, sellprice)
+        sellExePrice=0;
+        buyExePrice=0;
 
-        #self.clients[kbid].marketBuy(float(format(volume*buyprice,'.4f')))
-        #self.clients[kask].marketSell(float(format(volume,'.4f')))
         volume=float(format(volume,'.4f'))
         buyprice=float(format(buyprice,'.2f'))
         sellprice=float(format(sellprice,'.2f'))
-        self.clients[kask].buy(volume, buyprice)
-        self.clients[kbid].sell(volume, sellprice)
+
+        buyOrderId=self.clients[kask].buy(volume, buyprice)
+        #buyOrderId=1746867081
+        if buyOrderId:
+            buyExeInfo=self.clients[kask].orderInfo(buyOrderId)
+            buyExePrice=float(buyExeInfo['avg_price'])
+
+        sellOrderId=self.clients[kbid].sell(volume, sellprice)
+        #sellOrderId=5026388552
+        if sellOrderId:
+            sellExeInfo = self.clients[kbid].orderInfo(sellOrderId)
+            sellExePrice=float(sellExeInfo['avg_price'])
+
+        if kbid=='HuobiCNY' and kask=='OKCoinCNY':
+            self.lastTradeType=1
+        elif kbid=='OKCoinCNY' and kask=='HuobiCNY':
+            self.lastTradeType=2
+
+        self.profit+=sellExePrice*volume-buyExePrice*volume
+
+    def getTotalprofit(self):
+        return self.profit
