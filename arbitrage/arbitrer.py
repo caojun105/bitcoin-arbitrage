@@ -34,7 +34,8 @@ class Arbitrer(object):
         self.assure_path_exists(self.tickDataFileDic)
         self.assure_path_exists(self.accountInfoDumpDic)
         self.tickerdata=[]
-
+        self.tickThereHold=[]
+        self.tickGap={}
     def dump_depth(self,depthdata):
         fp= os.path.join(self.tickDataFileDic,str(int(time.time()))+'.json')
         with open(fp,'w') as f:
@@ -399,10 +400,11 @@ class Arbitrer(object):
                 market2 = self.depths[kmarket2]
                 if market1["asks"] and market2["bids"] \
                    and len(market1["asks"]) > 0 and len(market2["bids"]) > 0:
-                    if (kmarket1=='HuobiCNY') and (kmarket2=='OKCoinCNY'):
-                         offset=config.MEANVALUE
+                    if (kmarket1=='HuobiCNY') and (kmarket2=='OKCoinCNY'):##buy@HB and sell@OK
+                         offset=self.tickGap['hb']
+
                     elif (kmarket1=='OKCoinCNY') and (kmarket2=='HuobiCNY'):
-                         offset=-config.MEANVALUE
+                         offset= -self.tickGap['ok']
                     if float(market1["asks"][0]['price']) \
                        < float(market2["bids"][0]['price']+offset):
                         self.arbitrage_opportunity_offset(kmarket1, market1["asks"][0],
@@ -415,13 +417,28 @@ class Arbitrer(object):
             if(observer.end_opportunity_finder()):
                 print('k')
                 #self.dump_depth(self.depths)
+    def calGapOffset(self,tickData):
+        okdata=float(tickData['OKCoinCNY']['ticker']['last'])
+        hbdata=float(tickData['HuobiCNY']['ticker']['last'])
+        if len(self.tickThereHold)<150 :
+            self.tickThereHold.append(hbdata-okdata)
+            return 0,0
+        else:
+            del self.tickThereHold[0]
+            self.tickThereHold.append(hbdata-okdata)
+            tmp=self.tickThereHold[:]
+            tmp.sort()
+            return tmp[15],tmp[len(self.tickThereHold)-15]
 
     def loop(self):
         looptime=0
         while True:
             if self.dumpTickData:
                 looptime=looptime+1
-                self.tickerdata.append(self.get_tickdata())
+                tmpTickData=self.get_tickdata()
+                hboffset,okoffset =self.calGapOffset(tmpTickData)
+                self.tickGap={'hb':hboffset,'ok':okoffset}
+                self.tickerdata.append(tmpTickData)
                 if looptime>250:
                     self.dump_depth(self.tickerdata)
                     self.tickerdata=[]

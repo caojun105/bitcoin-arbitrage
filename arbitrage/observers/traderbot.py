@@ -47,6 +47,7 @@ class TraderBot(Observer):
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
         if  profit < config.profit_thresh or perc*sellprice < config.perc_thresh:
+        #if volume<0.08 or perc*sellprice<0.2:
             logging.verbose("[TraderBot] Profit or profit percentage lower than"+
                             " thresholds")
             return
