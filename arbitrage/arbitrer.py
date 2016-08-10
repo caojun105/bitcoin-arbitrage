@@ -196,34 +196,33 @@ class Arbitrer(object):
         tradePrice=0
         buyAveragePrice=0
         sellAveragePrice=0
-
-        while(self.depths[kask]["asks"][askIndex]['price']\
-            < self.depths[kbid]["bids"][bidIndex]['price']+offset):
-            try:
-                if buyamount<sellamount:
-                    buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
-                    buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
-                    askIndex+=1
-                    tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
-                    tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
-                    #if askIndex>=len(self.depths[kask]["asks"]):
-                        #break
-                else:
-                    sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
-                    sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
-                    test=sellCost/sellamount
-                    bidIndex+=1
-                    tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
-                    tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
-                    #if bidIndex>=len(self.depths[kbid]["bids"]):
-                        #break
-                if bidIndex>=len(self.depths[kbid]["bids"]) or askIndex>=len(self.depths[kask]["asks"]):
-                    break
-            except Exception as ex:
+        try:
+            while(self.depths[kask]["asks"][askIndex]['price']\
+                < self.depths[kbid]["bids"][bidIndex]['price']+offset):
+                    if buyamount<sellamount:
+                        buyamount=buyamount+self.depths[kask]["asks"][askIndex]['amount']
+                        buyCost+= self.depths[kask]["asks"][askIndex]['amount'] * self.depths[kask]["asks"][askIndex]['price']
+                        askIndex+=1
+                        tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
+                        tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
+                        #if askIndex>=len(self.depths[kask]["asks"]):
+                            #break
+                    else:
+                        sellCost+=self.depths[kbid]["bids"][bidIndex]['amount']*self.depths[kbid]["bids"][bidIndex]['price']
+                        sellamount=sellamount+self.depths[kbid]["bids"][bidIndex]['amount']
+                        test=sellCost/sellamount
+                        bidIndex+=1
+                        tradeBuyPrice=self.depths[kask]["asks"][askIndex]['price']
+                        tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
+                        #if bidIndex>=len(self.depths[kbid]["bids"]):
+                            #break
+                    if bidIndex>=len(self.depths[kbid]["bids"]) or askIndex>=len(self.depths[kask]["asks"]):
+                        break
+        except Exception as ex:
                 logging.warn("depth fail%s" % ex)
-                t,v,tb = sys.exc_info()
-                #traceback.print_exc()
-
+                logging.warn("bidindex=%d,askindex=%d,bid=%s,aks=%s,lenask=%d,lenBid=%d"%(bidIndex,\
+                    askIndex,kbid,kask,len(self.depths[kask]["asks"]),len(self.depths[kbid]["bids"])))
+                return 0,0,0,0,0,0
         if buyamount!=0:
             buyAveragePrice=buyCost/buyamount
         if sellamount!=0:
@@ -429,7 +428,7 @@ class Arbitrer(object):
                     looptime=0
             for observer in self.observers:
                 if observer.get_observer_name()=='TraderBot':
-                   observer.update_balance()            
+                    observer.update_balance()            
             self.depths = self.update_depths()
             self.tick_offset()
             time.sleep(config.refresh_rate)
