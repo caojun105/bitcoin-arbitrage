@@ -37,7 +37,10 @@ class Arbitrer(object):
         self.tickThereHold=[]
         self.tickGap={}
     def dump_depth(self,depthdata):
-        fp= os.path.join(self.tickDataFileDic,str(int(time.time()))+'.json')
+        curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
+        filepath=os.path.join(self.tickDataFileDic,curtimeStr)  ## accroding to the date to dump information
+        self.assure_path_exists(filepath)
+        fp= os.path.join(filepath,str(int(time.time()))+'.json')
         with open(fp,'w') as f:
             json.dump(depthdata,f)
     def dumpInfo(self):
