@@ -9,8 +9,8 @@ import json
 import sys
 from concurrent.futures import ThreadPoolExecutor, wait
 import os
-
-
+import traceback
+import datetime
 class Arbitrer(object):
     def assure_path_exists(self,path):
         os.makedirs(path, exist_ok=True)
@@ -443,7 +443,7 @@ class Arbitrer(object):
                     looptime=looptime+1
                     tmpTickData=self.get_tickdata()
                     hboffset,okoffset =self.calGapOffset(tmpTickData)
-                    if self.exeStart:
+                    if (self.exeStart==False):
                         continue
                     self.tickGap={'hb':hboffset,'ok':okoffset}
                     self.tickerdata.append(tmpTickData)
@@ -459,6 +459,5 @@ class Arbitrer(object):
                 time.sleep(config.refresh_rate)
             except KeyboardInterrupt:
                 pass
-            else:
-                print("exception, retry")
-                continue
+            except  Exception as ex:
+                print("erro :%s[retry]" % ex)
