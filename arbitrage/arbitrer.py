@@ -36,6 +36,7 @@ class Arbitrer(object):
         self.tickerdata=[]
         self.tickThereHold=[]
         self.tickGap={}
+        self.exeStart=False
     def dump_depth(self,depthdata):
         curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
         filepath=os.path.join(self.tickDataFileDic,curtimeStr)  ## accroding to the date to dump information
@@ -427,6 +428,7 @@ class Arbitrer(object):
             self.tickThereHold.append(hbdata-okdata)
             return 0,0
         else:
+            self.exeStart=True
             del self.tickThereHold[0]
             self.tickThereHold.append(hbdata-okdata)
             tmp=self.tickThereHold[:]
@@ -441,6 +443,8 @@ class Arbitrer(object):
                     looptime=looptime+1
                     tmpTickData=self.get_tickdata()
                     hboffset,okoffset =self.calGapOffset(tmpTickData)
+                    if self.exeStart:
+                        continue
                     self.tickGap={'hb':hboffset,'ok':okoffset}
                     self.tickerdata.append(tmpTickData)
                     if looptime>250:
@@ -453,5 +457,8 @@ class Arbitrer(object):
                 self.depths = self.update_depths()
                 self.tick_offset()
                 time.sleep(config.refresh_rate)
-            except:
+            except KeyboardInterrupt:
+                pass
+            else:
                 print("exception, retry")
+                continue
