@@ -436,19 +436,22 @@ class Arbitrer(object):
     def loop(self):
         looptime=0
         while True:
-            if self.dumpTickData:
-                looptime=looptime+1
-                tmpTickData=self.get_tickdata()
-                hboffset,okoffset =self.calGapOffset(tmpTickData)
-                self.tickGap={'hb':hboffset,'ok':okoffset}
-                self.tickerdata.append(tmpTickData)
-                if looptime>250:
-                    self.dump_depth(self.tickerdata)
-                    self.tickerdata=[]
-                    looptime=0
-            for observer in self.observers:
-                if observer.get_observer_name()=='TraderBot':
-                    observer.update_balance()            
-            self.depths = self.update_depths()
-            self.tick_offset()
-            time.sleep(config.refresh_rate)
+            try:
+                if self.dumpTickData:
+                    looptime=looptime+1
+                    tmpTickData=self.get_tickdata()
+                    hboffset,okoffset =self.calGapOffset(tmpTickData)
+                    self.tickGap={'hb':hboffset,'ok':okoffset}
+                    self.tickerdata.append(tmpTickData)
+                    if looptime>250:
+                        self.dump_depth(self.tickerdata)
+                        self.tickerdata=[]
+                        looptime=0
+                for observer in self.observers:
+                    if observer.get_observer_name()=='TraderBot':
+                        observer.update_balance()            
+                self.depths = self.update_depths()
+                self.tick_offset()
+                time.sleep(config.refresh_rate)
+            except:
+                print("exception, retry")
