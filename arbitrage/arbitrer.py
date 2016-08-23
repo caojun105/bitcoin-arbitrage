@@ -23,12 +23,14 @@ class Arbitrer(object):
         self.observers = []
         self.depths = {}
         self.dumpTickData=config.DUMP_TICKER
+        self.dumpTickDepth=config.DUMP_TICKER_DEPTH
         self.init_markets(config.markets)
         self.init_observers(config.observers)
         self.threadpool = ThreadPoolExecutor(max_workers=10)
         self.last_depth_update=0
         self.depthJsonFileDic='depth_json'
         self.tickDataFileDic='tikcer'
+        self.tickDepthFileDic='tickDepth'
         self.accountInfoDumpDic ='dump'
         self.assure_path_exists(self.depthJsonFileDic)
         self.assure_path_exists(self.tickDataFileDic)
@@ -36,6 +38,7 @@ class Arbitrer(object):
         self.tickerdata=[]
         self.tickThereHold=[]
         self.tickGap={}
+        self.tickAndDepth=[]
         self.exeStart=False
     def dump_depth(self,depthdata):
         curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
@@ -44,6 +47,13 @@ class Arbitrer(object):
         fp= os.path.join(filepath,str(int(time.time()))+'.json')
         with open(fp,'w') as f:
             json.dump(depthdata,f)
+    def dump_tickdepth(self,tickdepthdata):
+        curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
+        filepath=os.path.join(self.tickDepthFileDic,curtimeStr)  ## accroding to the date to dump information
+        self.assure_path_exists(filepath)
+        fp= os.path.join(filepath,str(int(time.time()))+'.json')
+        with open(fp,'w') as f:
+            json.dump(tickdepthdata,f)
     def dumpInfo(self):
         fp= os.path.join(self.accountInfoDumpDic,str(int(time.time()))+'.txt')
         profit=0
@@ -439,7 +449,7 @@ class Arbitrer(object):
         looptime=0
         while True:
             try:
-                if self.dumpTickData:
+                if self.dumpTickData or self.dumpTickDepth:
                     looptime=looptime+1
                     tmpTickData=self.get_tickdata()
                     hboffset,okoffset =self.calGapOffset(tmpTickData)
@@ -447,15 +457,23 @@ class Arbitrer(object):
                         continue
                     self.tickGap={'hb':hboffset,'ok':okoffset}
                     self.tickerdata.append(tmpTickData)
-                    if looptime>250:
-                        self.dump_depth(self.tickerdata)
-                        self.tickerdata=[]
-                        looptime=0
+
                 for observer in self.observers:
                     if observer.get_observer_name()=='TraderBot':
                         observer.update_balance()            
                 self.depths = self.update_depths()
+                if self.dumpTickDepth:
+                    tmpTickDepthData={'tick':tmpTickData,'depth':self.depths}
+                    self.tickAndDepth.append(tmpTickDepthData)
                 self.tick_offset()
+                if looptime>250:
+                    if self.dumpTickData or self.dumpTickDepth:
+                        self.dump_depth(self.tickerdata)
+                        self.tickerdata=[]
+                    if self.dumpTickDepth:
+                        self.dump_tickdepth(self.tickAndDepth)
+                        self.tickAndDepth=[]
+                    looptime=0
                 time.sleep(config.refresh_rate)
             except KeyboardInterrupt:
                 pass
