@@ -438,7 +438,7 @@ class Arbitrer(object):
     def calGapOffset(self,tickData):
         okdata=float(tickData['OKCoinCNY']['ticker']['last'])
         hbdata=float(tickData['HuobiCNY']['ticker']['last'])
-        if len(self.tickThereHold)<150 :
+        if len(self.tickThereHold)<config.windowsize :
             self.tickThereHold.append(hbdata-okdata)
             return 0,0
         else:
@@ -447,7 +447,7 @@ class Arbitrer(object):
             self.tickThereHold.append(hbdata-okdata)
             tmp=self.tickThereHold[:]
             tmp.sort()
-            return tmp[15],tmp[len(self.tickThereHold)-15]
+            return tmp[config.threhold-1],tmp[len(self.tickThereHold)-config.threhold]
 
     def loop(self):
         looptime=0

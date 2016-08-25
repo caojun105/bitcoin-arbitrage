@@ -49,8 +49,8 @@ class TraderBot(Observer):
         return retVal
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
-        if  profit < config.profit_thresh or perc*sellprice < config.perc_thresh:
-        #if volume<0.08 or perc*sellprice<0.2:
+        #if  profit < config.profit_thresh or perc*sellprice < config.perc_thresh:
+        if volume<0.25:# or perc*sellprice<0.2:
             logging.verbose("[TraderBot] Profit or profit percentage lower than"+
                             " thresholds")
             return
@@ -104,13 +104,13 @@ class TraderBot(Observer):
         buyprice=float(format(buyprice,'.2f'))
         sellprice=float(format(sellprice,'.2f'))
 
-        buyOrderId=self.clients[kask].buy(volume, buyprice)
+        buyOrderId=self.clients[kask].buy(volume, buyprice+3)
         #buyOrderId=1746867081
         if buyOrderId:
             buyExeInfo=self.clients[kask].orderInfo(buyOrderId)
             buyExePrice=float(buyExeInfo['avg_price'])
 
-        sellOrderId=self.clients[kbid].sell(volume, sellprice)
+        sellOrderId=self.clients[kbid].sell(volume, sellprice-3)
         #sellOrderId=5026388552
         if sellOrderId:
             sellExeInfo = self.clients[kbid].orderInfo(sellOrderId)
