@@ -43,7 +43,10 @@ class TraderBot(Observer):
     def update_balance(self):
         for kclient in self.clients:
             self.clients[kclient].get_info()
-
+    def get_client_balance(self):
+        retVal={'HuobiCNY':{ 'cny':self.clients['HuobiCNY'].cny_balance, 'btc': self.clients['HuobiCNY'].btc_balance},\
+                'OKCoinCNY':{ 'cny':self.clients['OKCoinCNY'].cny_balance, 'btc': self.clients['OKCoinCNY'].btc_balance}}
+        return retVal
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
         if  profit < config.profit_thresh or perc*sellprice < config.perc_thresh:

@@ -40,6 +40,7 @@ class Arbitrer(object):
         self.tickGap={}
         self.tickAndDepth=[]
         self.exeStart=False
+        self.clientBalance={}
     def dump_depth(self,depthdata):
         curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
         filepath=os.path.join(self.tickDataFileDic,curtimeStr)  ## accroding to the date to dump information
@@ -416,9 +417,12 @@ class Arbitrer(object):
                    and len(market1["asks"]) > 0 and len(market2["bids"]) > 0:
                     if (kmarket1=='HuobiCNY') and (kmarket2=='OKCoinCNY'):##buy@HB and sell@OK
                          offset=self.tickGap['hb']
-
+                         if offset>0 and self.clientBalance['HuobiCNY']['btc']>config.max_tx_volume:
+                             offset=0
                     elif (kmarket1=='OKCoinCNY') and (kmarket2=='HuobiCNY'):
                          offset= -self.tickGap['ok']
+                         if offset>0 and self.clientBalance['OKCoinCNY']['btc']>config.max_tx_volume:
+                             offset=0
                     if float(market1["asks"][0]['price']) \
                        < float(market2["bids"][0]['price']+offset):
                         self.arbitrage_opportunity_offset(kmarket1, market1["asks"][0],
@@ -460,7 +464,8 @@ class Arbitrer(object):
 
                 for observer in self.observers:
                     if observer.get_observer_name()=='TraderBot':
-                        observer.update_balance()            
+                        observer.update_balance()
+                        self.clientBalance = observer.get_client_balance()         
                 self.depths = self.update_depths()
                 if self.dumpTickDepth:
                     tmpTickDepthData={'tick':tmpTickData,'depth':self.depths}
