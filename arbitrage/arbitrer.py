@@ -197,6 +197,7 @@ class Arbitrer(object):
             sellAveragePrice=sellCost/sellamount
 
         tradeAmount=min(buyamount,sellamount)
+        print("%d,%d,%f"%(askIndex,bidIndex,tradeAmount))
         maxProfit=(sellAveragePrice-buyAveragePrice)*tradeAmount
         return maxProfit,tradeAmount,\
             tradePrice,tradePrice,\
@@ -232,7 +233,7 @@ class Arbitrer(object):
                         tradeSellPrice=self.depths[kbid]["bids"][bidIndex]['price']
                         #if bidIndex>=len(self.depths[kbid]["bids"]):
                             #break
-                    if bidIndex>=len(self.depths[kbid]["bids"]) or askIndex>=len(self.depths[kask]["asks"]):
+                    if bidIndex>=len(self.depths[kbid]["bids"])-1 or askIndex>=len(self.depths[kask]["asks"])-1:
                         break
         except Exception as ex:
                 logging.warn("depth fail%s" % ex)
@@ -417,17 +418,18 @@ class Arbitrer(object):
                    and len(market1["asks"]) > 0 and len(market2["bids"]) > 0:
                     if (kmarket1=='HuobiCNY') and (kmarket2=='OKCoinCNY'):##buy@HB and sell@OK
                          offset=self.tickGap['hb']
-                         if offset>0 and self.clientBalance['HuobiCNY']['btc']>config.max_tx_volume:
+                         if offset>0 and self.clientBalance['HuobiCNY']['btc']>12*config.max_tx_volume:
                              offset=0
                     elif (kmarket1=='OKCoinCNY') and (kmarket2=='HuobiCNY'):
                          offset= -self.tickGap['ok']
-                         if offset>0 and self.clientBalance['OKCoinCNY']['btc']>config.max_tx_volume:
+                         if offset>0 and self.clientBalance['OKCoinCNY']['btc']>12*config.max_tx_volume:
                              offset=0
+
                     if float(market1["asks"][0]['price']) \
                        < float(market2["bids"][0]['price']+offset):
                         self.arbitrage_opportunity_offset(kmarket1, market1["asks"][0],
                                        kmarket2, market2["bids"][0],offset)
-
+        print("offset=[%f,%f] btc@hb=%f, btc@ok=%f"%(self.tickGap['hb'],self.tickGap['ok'],self.clientBalance['HuobiCNY']['btc'],self.clientBalance['OKCoinCNY']['btc']))
         # if current time has elapsed many, return and do nothing.
         if time.time()-self.last_depth_update>0.2:
             return  
@@ -440,6 +442,7 @@ class Arbitrer(object):
         hbdata=float(tickData['HuobiCNY']['ticker']['last'])
         if len(self.tickThereHold)<config.windowsize :
             self.tickThereHold.append(hbdata-okdata)
+            print("not begin %f, %f"%(hbdata,okdata))
             return 0,0
         else:
             self.exeStart=True
@@ -451,14 +454,15 @@ class Arbitrer(object):
 
     def loop(self):
         looptime=0
+        discount=0
         while True:
             try:
                 if self.dumpTickData or self.dumpTickDepth:
                     looptime=looptime+1
                     tmpTickData=self.get_tickdata()
                     hboffset,okoffset =self.calGapOffset(tmpTickData)
-                    if (self.exeStart==False):
-                        continue
+                    #if (self.exeStart==False):
+                        #continue
                     self.tickGap={'hb':hboffset,'ok':okoffset}
                     self.tickerdata.append(tmpTickData)
 
@@ -470,6 +474,10 @@ class Arbitrer(object):
                 if self.dumpTickDepth:
                     tmpTickDepthData={'tick':tmpTickData,'depth':self.depths}
                     self.tickAndDepth.append(tmpTickDepthData)
+                discount+=1
+               # print("number:%d",discount)
+                if (self.exeStart==False):
+                    continue
                 self.tick_offset()
                 if looptime>250:
                     if self.dumpTickData or self.dumpTickDepth:

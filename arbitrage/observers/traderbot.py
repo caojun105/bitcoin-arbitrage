@@ -21,6 +21,7 @@ class TraderBot(Observer):
         self.potential_trades = []
         self.update_balance()
         self.profit=0
+        self.planprofit=0
         self.exeInfo=''
     def get_observer_name(self):
         return 'TraderBot'
@@ -123,8 +124,10 @@ class TraderBot(Observer):
 
         if sellExePrice and buyExePrice:
             self.profit+=sellExePrice*volume-buyExePrice*volume
+            self.planprofit+=sellprice*volume-buyprice*volume
+
             curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            str="[%s] TrdeVolume:%f  Buy @%s price %f and sell @%s price %f [%f]\n" % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,self.profit)
+            str="[%s] TrdeVolume:%f  Buy @%s price %f[%f] and sell @%s price %f[%f] currentprofit=%f[%f] totalProfit=%f[%f]\n" % (curtimeStr, volume,kask,buyExePrice,buyprice,kbid,sellExePrice,sellprice,(sellExePrice-buyExePrice)*volume,(sellprice-buyprice)*volume,self.profit,self.planprofit)
             print(str)
             self.exeInfo+= str
     def getTotalprofit(self):

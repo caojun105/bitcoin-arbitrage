@@ -1,34 +1,750 @@
-loop===
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
-===>arbitrage
-http://api.huobi.com/staticmarket/depth_btc_50.js
+not begin 4092.550000, 4093.520000
+number:%d 1
+not begin 4092.490000, 4093.520000
+number:%d 2
+not begin 4092.490000, 4093.590000
+number:%d 3
+not begin 4092.510000, 4093.520000
+number:%d 4
+not begin 4092.680000, 4093.720000
+number:%d 5
+not begin 4092.680000, 4093.770000
+number:%d 6
+not begin 4092.500000, 4093.770000
+number:%d 7
+not begin 4092.680000, 4093.820000
+number:%d 8
+not begin 4092.680000, 4093.820000
+number:%d 9
+not begin 4092.690000, 4093.830000
+number:%d 10
+not begin 4092.690000, 4093.820000
+number:%d 11
+not begin 4092.690000, 4093.990000
+number:%d 12
+not begin 4092.800000, 4093.990000
+number:%d 13
+not begin 4092.800000, 4094.020000
+number:%d 14
+not begin 4092.800000, 4094.050000
+number:%d 15
+not begin 4092.800000, 4094.050000
+number:%d 16
+not begin 4092.800000, 4094.000000
+number:%d 17
+not begin 4092.800000, 4093.870000
+number:%d 18
+not begin 4092.800000, 4093.880000
+number:%d 19
+not begin 4092.780000, 4093.930000
+number:%d 20
+not begin 4092.800000, 4093.960000
+number:%d 21
+not begin 4092.780000, 4093.960000
+number:%d 22
+not begin 4092.780000, 4093.870000
+number:%d 23
+not begin 4092.730000, 4093.870000
+number:%d 24
+not begin 4092.730000, 4093.860000
+number:%d 25
+not begin 4093.180000, 4093.960000
+number:%d 26
+not begin 4093.180000, 4093.990000
+number:%d 27
+not begin 4092.950000, 4094.000000
+number:%d 28
+not begin 4092.950000, 4094.050000
+number:%d 29
+not begin 4092.950000, 4094.070000
+number:%d 30
+not begin 4093.360000, 4094.130000
+number:%d 31
+not begin 4093.360000, 4094.000000
+number:%d 32
+not begin 4093.360000, 4093.980000
+number:%d 33
+not begin 4092.900000, 4093.950000
+number:%d 34
+not begin 4092.930000, 4094.000000
+number:%d 35
+not begin 4093.000000, 4093.980000
+number:%d 36
+not begin 4092.960000, 4094.180000
+number:%d 37
+not begin 4092.930000, 4094.050000
+number:%d 38
+not begin 4092.960000, 4094.080000
+number:%d 39
+not begin 4092.940000, 4094.190000
+number:%d 40
+not begin 4092.940000, 4094.220000
+number:%d 41
+not begin 4092.940000, 4094.200000
+number:%d 42
+not begin 4092.960000, 4094.240000
+number:%d 43
+not begin 4092.960000, 4094.240000
+number:%d 44
+not begin 4093.190000, 4094.240000
+number:%d 45
+not begin 4093.100000, 4094.320000
+number:%d 46
+not begin 4093.100000, 4094.330000
+number:%d 47
+not begin 4093.070000, 4094.310000
+number:%d 48
+not begin 4093.140000, 4094.220000
+number:%d 49
+not begin 4092.930000, 4094.310000
+number:%d 50
+not begin 4092.930000, 4094.350000
+number:%d 51
+not begin 4092.930000, 4094.250000
+number:%d 52
+not begin 4092.930000, 4094.280000
+number:%d 53
+not begin 4093.360000, 4094.230000
+number:%d 54
+not begin 4093.310000, 4094.370000
+number:%d 55
+not begin 4092.920000, 4094.370000
+number:%d 56
+not begin 4093.260000, 4094.370000
+number:%d 57
+not begin 4093.010000, 4094.320000
+number:%d 58
+not begin 4093.220000, 4094.310000
+number:%d 59
+not begin 4093.220000, 4094.400000
+number:%d 60
+number:%d 61
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 62
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 63
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 64
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 65
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 66
+offset=-1.250000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 67
+offset=-1.240000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 68
+offset=-1.240000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 69
+offset=-1.240000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 70
+offset=-1.240000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 71
+offset=-1.240000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 72
+offset=-1.230000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 73
+offset=-1.230000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 74
+offset=-1.230000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 75
+offset=-1.230000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 76
+offset=-1.230000, btc@hb=2.753200, btc@ok=0.073863
+[2016-09-08 16:34:37] TrdeVolume:0.070000  Buy @HuobiCNY price 4095.000000[4094.630000] and sell @OKCoinCNY price 4096.050000[4095.780000] currentprofit=0.073500[0.080500] totalProfit=0.073500[0.080500]
+
+k
+number:%d 77
+offset=-1.230000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 78
+offset=-1.230000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 79
+offset=-1.230000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 80
+offset=-1.230000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 81
+offset=-1.240000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 82
+offset=-1.240000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 83
+offset=-1.250000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 84
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 85
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 86
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 87
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 88
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 89
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 90
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 91
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 92
+offset=-1.260000, btc@hb=2.823200, btc@ok=0.003863
+k
+number:%d 93
+offset=-1.260000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 94
+offset=-1.260000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 95
+offset=-1.260000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 96
+offset=-1.260000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 97
+offset=-1.280000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 98
+offset=-1.280000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 99
+offset=-1.280000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 100
+offset=-1.280000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 101
+offset=-1.280000, btc@hb=2.753200, btc@ok=0.073863
+k
+number:%d 102
+offset=-1.280000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 103
+offset=-1.280000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 104
+offset=-1.310000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 105
+offset=-1.320000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 106
+offset=-1.330000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 107
+offset=-1.350000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 108
+offset=-1.370000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 109
+offset=-1.380000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 110
+offset=-1.380000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 111
+offset=-1.380000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 112
+offset=-1.380000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 113
+offset=-1.450000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 114
+offset=-1.500000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 115
+offset=-1.500000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 116
+offset=-1.590000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 117
+offset=-1.900000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 118
+offset=-2.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 119
+offset=-3.100000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 120
+offset=-3.700000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 121
+offset=-5.290000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 122
+offset=-5.920000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 123
+offset=-7.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 124
+offset=-8.330000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 125
+offset=-8.710000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 126
+offset=-10.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 127
+offset=-10.500000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 128
+offset=-12.370000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 129
+offset=-13.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 130
+offset=-13.750000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 131
+offset=-14.430000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 132
+offset=-15.590000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 133
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 134
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 135
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 136
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 137
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 138
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 139
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 140
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 141
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 142
+offset=-16.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 143
+offset=-16.370000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 144
+offset=-17.130000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 145
+offset=-17.490000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 146
+offset=-18.010000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 147
+offset=-18.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 148
+offset=-18.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 149
+offset=-18.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 150
+offset=-18.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 151
+offset=-18.400000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 152
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 153
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 154
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 155
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 156
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 157
+offset=-18.990000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 158
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 159
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 160
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 161
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 162
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 163
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 164
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 165
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+number:%d 166
+offset=-19.000000, btc@hb=2.823200, btc@ok=0.003863
+k
+number:%d 167
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 168
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 169
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 170
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 171
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 172
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 173
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 174
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 175
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 176
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 177
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 178
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 179
+offset=-19.000000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 180
+offset=-18.990000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 181
+offset=-18.990000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 182
+offset=-18.990000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 183
+offset=-18.400000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 184
+offset=-18.350000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 185
+offset=-18.350000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 186
+offset=-18.010000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 187
+offset=-17.410000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 188
+offset=-15.160000, btc@hb=2.753200, btc@ok=0.073863
+number:%d 189
+offset=-14.190000, btc@hb=2.753200, btc@ok=0.731863
+number:%d 190
+offset=-14.000000, btc@hb=2.753200, btc@ok=0.731863
+number:%d 191
+offset=-13.850000, btc@hb=2.753200, btc@ok=0.731863
+number:%d 192
+offset=-13.610000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 193
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 194
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 195
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 196
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 197
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 198
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 199
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 200
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 201
+offset=-13.090000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 202
+offset=-13.000000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 203
+offset=-12.360000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 204
+offset=-12.110000, btc@hb=2.753200, btc@ok=1.008863
+number:%d 205
+offset=-12.110000, btc@hb=2.753200, btc@ok=1.008863
+[2016-09-08 16:38:55] TrdeVolume:0.070000  Buy @HuobiCNY price 4154.100000[4154.090000] and sell @OKCoinCNY price 4165.020000[4164.390000] currentprofit=0.764400[0.721000] totalProfit=0.837900[0.801500]
+
+k
+number:%d 206
+offset=-12.110000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 207
+offset=-12.110000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 208
+offset=-11.850000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 209
+offset=-11.580000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 210
+offset=-11.060000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 211
+offset=-11.060000, btc@hb=2.823200, btc@ok=0.938863
+number:%d 212
+offset=-11.060000, btc@hb=4.006300, btc@ok=0.938863
+[2016-09-08 16:39:10] TrdeVolume:0.070000  Buy @HuobiCNY price 4153.300000[4153.950000] and sell @OKCoinCNY price 4165.000000[4164.910000] currentprofit=0.819000[0.767200] totalProfit=1.656900[1.568700]
+
+k
+number:%d 213
+offset=-11.060000, btc@hb=4.076300, btc@ok=0.868863
+k
+number:%d 214
+offset=-11.060000, btc@hb=4.146300, btc@ok=0.798863
+[2016-09-08 16:39:15] TrdeVolume:0.070000  Buy @HuobiCNY price 4153.290000[4154.990000] and sell @OKCoinCNY price 4166.418600[4166.020000] currentprofit=0.919002[0.772100] totalProfit=2.575902[2.340800]
+
+k
+number:%d 215
+offset=-11.060000, btc@hb=4.216300, btc@ok=0.728863
+number:%d 216
+offset=-11.060000, btc@hb=4.216300, btc@ok=0.728863
+[2016-09-08 16:39:22] TrdeVolume:0.070000  Buy @HuobiCNY price 4152.970000[4154.790000] and sell @OKCoinCNY price 4166.380000[4165.120000] currentprofit=0.938700[0.723100] totalProfit=3.514602[3.063900]
+
+k
+number:%d 217
+offset=-11.060000, btc@hb=4.286300, btc@ok=0.658863
+[2016-09-08 16:39:24] TrdeVolume:0.070000  Buy @HuobiCNY price 4155.210000[4154.000000] and sell @OKCoinCNY price 4167.737100[4164.780000] currentprofit=0.876897[0.754600] totalProfit=4.391499[3.818500]
+
+k
+number:%d 218
+offset=-11.060000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 219
+offset=-11.550000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 220
+offset=-11.200000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 221
+offset=-11.060000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 222
+offset=-11.060000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 223
+offset=-10.390000, btc@hb=4.356300, btc@ok=0.588863
+number:%d 224
+offset=-10.390000, btc@hb=5.493000, btc@ok=0.588863
+number:%d 225
+offset=-11.200000, btc@hb=5.493000, btc@ok=0.588863
+[2016-09-08 16:39:42] TrdeVolume:0.070000  Buy @HuobiCNY price 4156.950000[4158.580000] and sell @OKCoinCNY price 4170.490000[4169.250000] currentprofit=0.947800[0.746900] totalProfit=5.339299[4.565400]
+
+k
+number:%d 226
+offset=-11.550000, btc@hb=5.563000, btc@ok=0.518863
+number:%d 227
+offset=-11.580000, btc@hb=5.563000, btc@ok=0.518863
+[2016-09-08 16:39:47] TrdeVolume:0.070000  Buy @HuobiCNY price 4158.000000[4158.500000] and sell @OKCoinCNY price 4170.198600[4169.980000] currentprofit=0.853902[0.803600] totalProfit=6.193201[5.369000]
+
+k
+number:%d 228
+offset=-11.720000, btc@hb=5.633000, btc@ok=0.448863
+[2016-09-08 16:39:50] TrdeVolume:0.070000  Buy @HuobiCNY price 4157.970000[4158.500000] and sell @OKCoinCNY price 4170.100000[4169.980000] currentprofit=0.849100[0.803600] totalProfit=7.042301[6.172600]
+
+k
+number:%d 229
+offset=-11.720000, btc@hb=5.703000, btc@ok=0.378863
+number:%d 230
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 231
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 232
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 233
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 234
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 235
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 236
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 237
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 238
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 239
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 240
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 241
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 242
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 243
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 244
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 245
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 246
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 247
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 248
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 249
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 250
+offset=-11.720000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 251
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 252
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 253
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 254
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 255
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 256
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+number:%d 257
+offset=-11.850000, btc@hb=6.363500, btc@ok=0.378863
+k
+number:%d 258
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 259
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 260
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 261
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 262
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 263
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 264
+offset=-11.850000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 265
+offset=-11.720000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 266
+offset=-11.700000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 267
+offset=-11.580000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 268
+offset=-11.550000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 269
+offset=-11.550000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 270
+offset=-11.550000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 271
+offset=-11.410000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 272
+offset=-11.210000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 273
+offset=-11.200000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 274
+offset=-11.100000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 275
+offset=-10.940000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 276
+offset=-10.940000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 277
+offset=-10.720000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 278
+offset=-10.680000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 279
+offset=-10.280000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 280
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 281
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 282
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 283
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 284
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+number:%d 285
+offset=-10.220000, btc@hb=6.433500, btc@ok=0.308863
+k
+number:%d 286
+offset=-10.150000, btc@hb=6.503500, btc@ok=0.238863
+number:%d 287
+offset=-10.150000, btc@hb=6.503500, btc@ok=0.238863
+number:%d 288
+offset=-10.150000, btc@hb=6.503500, btc@ok=0.238863
+number:%d 289
+offset=-10.150000, btc@hb=6.503500, btc@ok=0.238863
+number:%d 290
+offset=-10.220000, btc@hb=6.503500, btc@ok=0.238863
+k
+number:%d 291
+offset=-10.280000, btc@hb=6.573500, btc@ok=0.168863
+number:%d 292
+offset=-10.680000, btc@hb=6.573500, btc@ok=0.168863
+number:%d 293
+offset=-10.680000, btc@hb=6.573500, btc@ok=0.168863
+number:%d 294
+offset=-10.680000, btc@hb=6.573500, btc@ok=0.168863
+number:%d 295
+offset=-10.680000, btc@hb=6.573500, btc@ok=0.168863
+number:%d 296
+offset=-10.680000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 297
+offset=-10.680000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 298
+offset=-10.680000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 299
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 300
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 301
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 302
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 303
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 304
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 305
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 306
+offset=-10.280000, btc@hb=6.573500, btc@ok=3.294863
+number:%d 307
+offset=-10.680000, btc@hb=6.573500, btc@ok=3.294863
+[2016-09-08 16:42:37] TrdeVolume:0.070000  Buy @HuobiCNY price 4166.100000[4166.510000] and sell @OKCoinCNY price 4174.920000[4177.090000] currentprofit=0.617400[0.740600] totalProfit=7.659701[6.913200]
+
+k
+number:%d 308
+offset=-10.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 309
+offset=-10.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 310
+offset=-10.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 311
+offset=-10.150000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 312
+offset=-10.000000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 313
+offset=-9.880000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 314
+offset=-9.800000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 315
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 316
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 317
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 318
+offset=-9.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 319
+offset=-9.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 320
+offset=-9.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 321
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 322
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 323
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 324
+offset=-9.690000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 325
+offset=-9.680000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 326
+offset=-9.620000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 327
+offset=-9.560000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 328
+offset=-9.450000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 329
+offset=-9.450000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 330
+offset=-9.450000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 331
+offset=-9.480000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 332
+offset=-9.480000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 333
+offset=-9.480000, btc@hb=6.643500, btc@ok=3.224863
+number:%d 334
+offset=-9.560000, btc@hb=6.643500, btc@ok=3.224863
+[2016-09-08 16:43:30] TrdeVolume:0.070000  Buy @HuobiCNY price 4162.390000[4163.070000] and sell @OKCoinCNY price 4173.000000[4172.620000] currentprofit=0.742700[0.668500] totalProfit=8.402401[7.581700]
+
+k
+number:%d 335
+offset=-9.620000, btc@hb=6.713500, btc@ok=3.154863
+number:%d 336
+offset=-9.690000, btc@hb=6.713500, btc@ok=3.154863
+k
+number:%d 337
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 338
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 339
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 340
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 341
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 342
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 343
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 344
+offset=-9.800000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 345
+offset=-9.620000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 346
+offset=-9.560000, btc@hb=6.783500, btc@ok=3.084863
+number:%d 347
+offset=-9.520000, btc@hb=6.783500, btc@ok=3.084863
+[2016-09-08 16:43:59] TrdeVolume:0.070000  Buy @HuobiCNY price 4164.280000[4163.570000] and sell @OKCoinCNY price 4173.990000[4173.050000] currentprofit=0.679700[0.663600] totalProfit=9.082101[8.245300]
+
+k
+number:%d 348
+offset=-9.520000, btc@hb=6.853500, btc@ok=3.014863
+[2016-09-08 16:44:02] TrdeVolume:0.070000  Buy @HuobiCNY price 4164.500000[4164.990000] and sell @OKCoinCNY price 4174.360000[4174.360000] currentprofit=0.690200[0.655900] totalProfit=9.772301[8.901200]
+
+k
+number:%d 349
+offset=-9.520000, btc@hb=6.923500, btc@ok=2.944863
+number:%d 350
+offset=-9.520000, btc@hb=6.923500, btc@ok=2.944863
+number:%d 351
+offset=-9.480000, btc@hb=6.923500, btc@ok=2.944863
+You pressed Ctrl+C!
