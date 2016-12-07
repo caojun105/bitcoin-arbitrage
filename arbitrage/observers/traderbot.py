@@ -21,7 +21,6 @@ class TraderBot(Observer):
         self.potential_trades = []
         self.update_balance()
         self.profit=0
-        self.planprofit=0
         self.exeInfo=''
     def get_observer_name(self):
         return 'TraderBot'
@@ -45,8 +44,8 @@ class TraderBot(Observer):
         for kclient in self.clients:
             self.clients[kclient].get_info()
     def get_client_balance(self):
-        retVal={'HuobiCNY':{ 'cny':self.clients['HuobiCNY'].cny_balance, 'btc': self.clients['HuobiCNY'].btc_balance},\
-                'OKCoinCNY':{ 'cny':self.clients['OKCoinCNY'].cny_balance, 'btc': self.clients['OKCoinCNY'].btc_balance}}
+        retVal={'HuobiCNY':{ 'cny':self.clients['HuobiCNY'].cny_balance, 'btc': self.clients['HuobiCNY'].btc_balance,'asset':self.clients['HuobiCNY'].netAsset,'loanBtc':self.clients['HuobiCNY'].loanBtc},\
+                'OKCoinCNY':{ 'cny':self.clients['OKCoinCNY'].cny_balance, 'btc': self.clients['OKCoinCNY'].btc_balance,'asset':self.clients['OKCoinCNY'].netAsset,'loanBtc':self.clients['OKCoinCNY'].loanBtc}}
         return retVal
     def opportunity(self, profit, volume, buyprice, kask, sellprice, kbid, perc,
                     weighted_buyprice, weighted_sellprice):
@@ -90,6 +89,12 @@ class TraderBot(Observer):
     def watch_balances(self):
         pass
 
+    def excute_to_balance(self,volume,price,tradetype,extrangename):
+        if tradetype=='buy':
+            self.clients[extrangename].buy(volume,price)
+        elif tradetype=='sell':
+            self.clients[extrangename].sell(volume,price)
+
     def execute_trade(self, volume, kask, kbid, weighted_buyprice,
                       weighted_sellprice, buyprice, sellprice):
         self.last_trade = time.time()
@@ -106,12 +111,12 @@ class TraderBot(Observer):
         sellprice=float(format(sellprice,'.2f'))
 
         buyOrderId=self.clients[kask].buy(volume, buyprice+3)
+        sellOrderId=self.clients[kbid].sell(volume, sellprice-3)
         #buyOrderId=1746867081
         if buyOrderId:
             buyExeInfo=self.clients[kask].orderInfo(buyOrderId)
             buyExePrice=float(buyExeInfo['avg_price'])
 
-        sellOrderId=self.clients[kbid].sell(volume, sellprice-3)
         #sellOrderId=5026388552
         if sellOrderId:
             sellExeInfo = self.clients[kbid].orderInfo(sellOrderId)
@@ -123,13 +128,15 @@ class TraderBot(Observer):
             self.lastTradeType=2
 
         if sellExePrice and buyExePrice:
-            self.profit+=sellExePrice*volume-buyExePrice*volume
-            self.planprofit+=sellprice*volume-buyprice*volume
-
+            currentProfit=sellExePrice*volume-buyExePrice*volume
+            self.profit+=currentProfit
             curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            str="[%s] TrdeVolume:%f  Buy @%s price %f[%f] and sell @%s price %f[%f] currentprofit=%f[%f] totalProfit=%f[%f]\n" % (curtimeStr, volume,kask,buyExePrice,buyprice,kbid,sellExePrice,sellprice,(sellExePrice-buyExePrice)*volume,(sellprice-buyprice)*volume,self.profit,self.planprofit)
+            totolAsset= self.clients['HuobiCNY'].netAsset + self.clients['OKCoinCNY'].netAsset
+            str="[%s] TrdeVolume:%f  Buy @%s price %f and sell @%s price %f  currentProfit= %f [%f]  TOTALASSET=%f\n" \
+                          % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,currentProfit,self.profit,totolAsset)
             print(str)
             self.exeInfo+= str
+
     def getTotalprofit(self):
         return self.exeInfo
         #return self.profit

@@ -70,6 +70,8 @@ class PrivateOkCoinCNY(Market):
                 self.cny_balance = float(response['info']['funds']['free']['cny'])
                 self.btc_frozen =  float(response['info']['funds']['freezed']['btc'])
                 self.cny_frozen =  float(response['info']['funds']['freezed']['cny'])
+                self.netAsset= float(response['info']['funds']['asset']['net'])
+                self.loanBtc = float(response['info']['funds']['borrow']['btc'])
         return response
 
     def _orderInfo(self,orderId):
