@@ -449,8 +449,46 @@ class Arbitrer(object):
             tmp.sort()
             return tmp[config.threhold-1],tmp[len(self.tickThereHold)-config.threhold]
 
+    def balanceAccount(self,clientBalance,observer):                           
+        delta= clientBalance['HuobiCNY']['btc']+clientBalance['OkcoinCNY']['btc']\
+             -clientBalance['HuobiCNY']['loanBtc']-clientBalance['OkcoinCNY']['loanBtc']
+        if abs(delta)>config.delta_btc:
+            return True
+        else:
+            if delta>0:
+                tmpTickData=self.get_tickdata()
+                okprice=float(tmpTickData['OKCoinCNY']['ticker']['last'])
+                hbprice=float(tmpTickData['HuobiCNY']['ticker']['last'])
+                if okprice>hbprice:
+                   if clientBalance['OkcoinCNY']['btc']>delta:
+                      observer.excute_to_balance(abs(delta),'sell',okprice-5,'OkcoinCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['OkcoinCNY']['btc'],'sell',okprice-5,'OkcoinCNY')
+                      observer.excute_to_balance(delta-clientBalance['OkcoinCNY']['btc'],'sell',okprice-5,'HuobiCNY')
+                else:
+                   if clientBalance['HuobiCNY']['btc']>delta:
+                      observer.excute_to_balance(abs(delta),'sell',okprice-5,'HuobiCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['HuobiCNY']['btc'],'sell',okprice-5,'HuobiCNY')
+                      observer.excute_to_balance(delta-clientBalance['HuobiCNY']['btc'],'sell',okprice-5,'OkcoinCNY')
+            else:
+                if okprice<hbprice:
+                   if clientBalance['OkcoinCNY']['cny']>abs(delta)*okprice:
+                      observer.excute_to_balance(abs(delta),'buy',okprice+5,'OkcoinCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['OkcoinCNY']['cny']/(okprice+10),'buy',okprice+5,'OkcoinCNY')
+                      observer.excute_to_balance(abs(delta)-clientBalance['OkcoinCNY']['cny']/(okprice+10),'buy',hbprice+5,'HuobiCNY')
+                else:
+                   if clientBalance['HuobiCNY']['btc']>abs(delta)*hbprice:
+                      observer.excute_to_balance(abs(delta),'buy',hbprice+5,'HuobiCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['HuobiCNY']['cny']/(hbprice+10),'buy',hbprice+5,'HuobiCNY')
+                      observer.excute_to_balance(abs(delta)-clientBalance['OkcoinCNY']['cny']/(hbprice+10),'buy',okprice+5,'OkcoinCNY')
+        return False
+
     def loop(self):
         looptime=0
+
         while True:
             try:
                 if self.dumpTickData or self.dumpTickDepth:
@@ -464,8 +502,11 @@ class Arbitrer(object):
 
                 for observer in self.observers:
                     if observer.get_observer_name()=='TraderBot':
-                        observer.update_balance()
-                        self.clientBalance = observer.get_client_balance()         
+                        while True:
+                            observer.update_balance()
+                            self.clientBalance = observer.get_client_balance()
+                            while self.balanceAccount(clientBalance,observer)==False:
+                                time.sleep(0.3);
                 self.depths = self.update_depths()
                 if self.dumpTickDepth:
                     tmpTickDepthData={'tick':tmpTickData,'depth':self.depths}
