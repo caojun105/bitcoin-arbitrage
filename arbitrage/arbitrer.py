@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, wait
 import os
 import traceback
 import datetime
+from dbmanage import dbmanage
 class Arbitrer(object):
     def assure_path_exists(self,path):
         os.makedirs(path, exist_ok=True)
@@ -41,6 +42,7 @@ class Arbitrer(object):
         self.tickAndDepth=[]
         self.exeStart=False
         self.clientBalance={}
+        self.db=dbmanage('sqlite3.db')
     def dump_depth(self,depthdata):
         curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d")
         filepath=os.path.join(self.tickDataFileDic,curtimeStr)  ## accroding to the date to dump information
@@ -451,6 +453,56 @@ class Arbitrer(object):
             tmp=self.tickThereHold[:]
             tmp.sort()
             return tmp[config.threhold-1],tmp[len(self.tickThereHold)-config.threhold]
+    def balanceAccount(self,clientBalance,observer):                           
+        delta= clientBalance['HuobiCNY']['btc']+clientBalance['OkcoinCNY']['btc']\
+             -clientBalance['HuobiCNY']['loanBtc']-clientBalance['OkcoinCNY']['loanBtc']
+        if abs(delta)>config.delta_btc:
+            return True
+        else:
+            if delta>0:
+                tmpTickData=self.get_tickdata()
+                okprice=float(tmpTickData['OKCoinCNY']['ticker']['last'])
+                hbprice=float(tmpTickData['HuobiCNY']['ticker']['last'])
+                if okprice>hbprice:
+                   if clientBalance['OkcoinCNY']['btc']>delta:
+                      observer.excute_to_balance(abs(delta),'sell',okprice-5,'OkcoinCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['OkcoinCNY']['btc'],'sell',okprice-5,'OkcoinCNY')
+                      observer.excute_to_balance(delta-clientBalance['OkcoinCNY']['btc'],'sell',okprice-5,'HuobiCNY')
+                else:
+                   if clientBalance['HuobiCNY']['btc']>delta:
+                      observer.excute_to_balance(abs(delta),'sell',okprice-5,'HuobiCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['HuobiCNY']['btc'],'sell',okprice-5,'HuobiCNY')
+                      observer.excute_to_balance(delta-clientBalance['HuobiCNY']['btc'],'sell',okprice-5,'OkcoinCNY')
+            else:
+                if okprice<hbprice:
+                   if clientBalance['OkcoinCNY']['cny']>abs(delta)*okprice:
+                      observer.excute_to_balance(abs(delta),'buy',okprice+5,'OkcoinCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['OkcoinCNY']['cny']/(okprice+10),'buy',okprice+5,'OkcoinCNY')
+                      observer.excute_to_balance(abs(delta)-clientBalance['OkcoinCNY']['cny']/(okprice+10),'buy',hbprice+5,'HuobiCNY')
+                else:
+                   if clientBalance['HuobiCNY']['btc']>abs(delta)*hbprice:
+                      observer.excute_to_balance(abs(delta),'buy',hbprice+5,'HuobiCNY')
+                   else:
+                      observer.excute_to_balance(clientBalance['HuobiCNY']['cny']/(hbprice+10),'buy',hbprice+5,'HuobiCNY')
+                      observer.excute_to_balance(abs(delta)-clientBalance['OkcoinCNY']['cny']/(hbprice+10),'buy',okprice+5,'OkcoinCNY')
+        return False
+    def dbupdate_price_info(self,tickData):
+        priceinfo={}
+        priceinfo['time']=tickData['HuobiCNY']['time']
+        priceinfo['cur_logtime']=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        priceinfo['hbprice'] = float(tickData['OKCoinCNY']['ticker']['last'])
+        priceinfo['okprice'] = float(tickData['HuobiCNY']['ticker']['last'])
+        priceinfo['hb_btc']=self.clientBalance['HuobiCNY']['btc']
+        priceinfo['hb_asset']=float(format(self.clientBalance['HuobiCNY']['asset'],'.2f'))
+        priceinfo['ok_btc']=self.clientBalance['OKCoinCNY']['btc']
+        priceinfo['ok_asset']=float(format(self.clientBalance['OKCoinCNY']['asset'],'.2f'))
+        priceinfo['totoal_asset']=float(format((priceinfo['hb_asset']+priceinfo['ok_asset']),'.2f'))
+        priceinfo['low_offset']=float(format(self.tickGap['hb'],'.2f'))
+        priceinfo['high_offset']=float(format(self.tickGap['ok'],'.2f'))
+        self.db.update_priceinfo(priceinfo)
 
     def loop(self):
         looptime=0
@@ -460,11 +512,15 @@ class Arbitrer(object):
                 if self.dumpTickData or self.dumpTickDepth:
                     looptime=looptime+1
                     tmpTickData=self.get_tickdata()
+                    #['HuobiCNY'] = {'ticker': {'buy': 6091.15, 'high': 6150, 'last': 6091.2, 'low': 5818.01, 'open': 5864.03, 'sell': 6092, 'symbol': 'btccny', 'vol': 4877386.3398}, 'time': '1482392554'}
+                    #['OKCoinCNY'] = {'date': '1482392505', 'ticker': {'buy': '6088.62', 'high': '6150.0', 'last': '6088.67', 'low': '5655.55', 'sell': '6088.67', 'vol': '5185317.924'}}
                     hboffset,okoffset =self.calGapOffset(tmpTickData)
                     #if (self.exeStart==False):
                         #continue
                     self.tickGap={'hb':hboffset,'ok':okoffset}
                     self.tickerdata.append(tmpTickData)
+                    #time.sleep(config.refresh_rate)
+                    #self.dbupdate_price_info(tmpTickData)
 
                 for observer in self.observers:
                     if observer.get_observer_name()=='TraderBot':
@@ -477,6 +533,8 @@ class Arbitrer(object):
                 discount+=1
                # print("number:%d",discount)
                 if (self.exeStart==False):
+                    time.sleep(config.refresh_rate)
+                    self.dbupdate_price_info(tmpTickData)
                     continue
                 self.tick_offset()
                 if looptime>250:
@@ -487,6 +545,7 @@ class Arbitrer(object):
                         self.dump_tickdepth(self.tickAndDepth)
                         self.tickAndDepth=[]
                     looptime=0
+                self.dbupdate_price_info(tmpTickData)
                 time.sleep(config.refresh_rate)
             except KeyboardInterrupt:
                 pass

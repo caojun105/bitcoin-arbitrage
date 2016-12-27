@@ -6,6 +6,7 @@ from .observer import Observer
 from .emailer import send_email
 from fiatconverter import FiatConverter
 from private_markets import huobicny,okcoincny
+from dbmanage import dbmanage
 class TraderBot(Observer):
     def __init__(self):
         self.clients = {
@@ -22,6 +23,7 @@ class TraderBot(Observer):
         self.update_balance()
         self.profit=0
         self.exeInfo=''
+        self.db=dbmanage('sqlite3.db')
     def get_observer_name(self):
         return 'TraderBot'
     def begin_opportunity_finder(self, depths):
@@ -105,7 +107,9 @@ class TraderBot(Observer):
         #self.clients[kbid].sell(volume, sellprice)
         sellExePrice=0;
         buyExePrice=0;
-
+        currentProfit=0
+        curtimeStr=""
+   
         volume=float(format(volume,'.4f'))
         buyprice=float(format(buyprice,'.2f'))
         sellprice=float(format(sellprice,'.2f'))
@@ -136,7 +140,23 @@ class TraderBot(Observer):
                           % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,currentProfit,self.profit,totolAsset)
             print(str)
             self.exeInfo+= str
-
+        self.update_balance()
+        self.get_client_balance()
+        priceinfoLastUpadte=self.db.get_lastuptate_time()
+        tradeinfo={}
+        tradeinfo['TIME']=priceinfoLastUpadte
+        tradeinfo['CUR_LOGTIME']=curtimeStr
+        tradeinfo['ASK_MARKET']=kask
+        tradeinfo['BID_MARKET']=kbid
+        tradeinfo['BUY_PRICE']=buyExePrice
+        tradeinfo['SELL_PRICE']=sellExePrice
+        tradeinfo['BUY_PLANPRICE']=buyprice
+        tradeinfo['SELL_PLANPRICE']=sellprice
+        tradeinfo['BUY_AMOUNT']=volume
+        tradeinfo['SELL_AMOUNT']=volume
+        tradeinfo['CUR_PROFIT']=float(format(currentProfit,'.2f'))
+        tradeinfo['TOTOL_PROFIT']=float(format(self.profit,'.2f'))
+        self.db.update_tradeinfo(tradeinfo)
     def getTotalprofit(self):
         return self.exeInfo
         #return self.profit
