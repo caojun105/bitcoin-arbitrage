@@ -34,7 +34,11 @@ class TraderBot(Observer):
             return
         self.potential_trades.sort(key=lambda x: x[0])
         # Execute only the best (more profitable)
-        self.execute_trade(*self.potential_trades[0][1:])
+        try:
+            self.execute_trade(*self.potential_trades[0][1:])
+        except:
+            print("execute_trede exception")
+
         return True
 
     def get_min_tradeable_volume(self, buyprice, usd_bal, btc_bal):
@@ -109,7 +113,11 @@ class TraderBot(Observer):
         buyExePrice=0;
         currentProfit=0
         curtimeStr=""
-   
+        exe_state=0
+        lastMarketBtc={}
+        lastMarketBtc[kask]=self.clients[kask].btc_balance
+        lastMarketBtc[kbid]=self.clients[kbid].btc_balance
+
         volume=float(format(volume,'.4f'))
         buyprice=float(format(buyprice,'.2f'))
         sellprice=float(format(sellprice,'.2f'))
@@ -118,30 +126,57 @@ class TraderBot(Observer):
         sellOrderId=self.clients[kbid].sell(volume, sellprice-3)
         #buyOrderId=1746867081
         if buyOrderId:
-            buyExeInfo=self.clients[kask].orderInfo(buyOrderId)
-            buyExePrice=float(buyExeInfo['avg_price'])
+            for i in range(0,4):
+                buyExeInfo=self.clients[kask].orderInfo(buyOrderId)
+                buyExePrice=float(buyExeInfo['avg_price'])
+                if buyExePrice:
+                    break
+                time.sleep(0.02)
 
         #sellOrderId=5026388552
         if sellOrderId:
-            sellExeInfo = self.clients[kbid].orderInfo(sellOrderId)
-            sellExePrice=float(sellExeInfo['avg_price'])
+            for i in range(0,4):
+                sellExeInfo = self.clients[kbid].orderInfo(sellOrderId)
+                sellExePrice=float(sellExeInfo['avg_price'])
+                if sellExePrice:
+                    break
+                time.sleep(0.02)
 
         if kbid=='HuobiCNY' and kask=='OKCoinCNY':
             self.lastTradeType=1
         elif kbid=='OKCoinCNY' and kask=='HuobiCNY':
             self.lastTradeType=2
 
-        if sellExePrice and buyExePrice:
-            currentProfit=sellExePrice*volume-buyExePrice*volume
-            self.profit+=currentProfit
-            curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            totolAsset= self.clients['HuobiCNY'].netAsset + self.clients['OKCoinCNY'].netAsset
-            str="[%s] TrdeVolume:%f  Buy @%s price %f and sell @%s price %f  currentProfit= %f [%f]  TOTALASSET=%f\n" \
-                          % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,currentProfit,self.profit,totolAsset)
-            print(str)
-            self.exeInfo+= str
+########
         self.update_balance()
         self.get_client_balance()
+
+
+       # actualBuy=round(self.clients[kask].btc_balance-lastMarketBtc[kask],4)
+        #actualSell=round(lastMarketBtc[kbid]-self.clients[kbid].btc_balance,4)
+        if sellExePrice and buyExePrice:
+            exe_state=1
+        elif round(self.clients[kask].btc_balance-lastMarketBtc[kask],4)==volume and round(lastMarketBtc[kbid]-self.clients[kbid].btc_balance,4)==volume:
+            if sellExePrice==0:
+                sellExePrice=sellprice
+            if buyExePrice==0:
+                buyExePrice=buyprice
+            exe_state=2
+        else:
+            self.clients[kask].sell(round(self.clients[kask].btc_balance-lastMarketBtc[kask],4),sellprice+20)   ##roll back
+            self.clients[kbid].buy(round(lastMarketBtc[kbid]-self.clients[kbid].btc_balance,4),buyprice-20)
+            sellExePrice,buyExePrice=0,0
+            exe_state=3
+
+        currentProfit=sellExePrice*volume-buyExePrice*volume
+        self.profit+=currentProfit
+        curtimeStr=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        totolAsset= self.clients['HuobiCNY'].netAsset + self.clients['OKCoinCNY'].netAsset
+        str="[%s] TrdeVolume:%f  Buy @%s price %f and sell @%s price %f  currentProfit= %f [%f]  TOTALASSET=%f\n" \
+                          % (curtimeStr, volume,kask,buyExePrice,kbid,sellExePrice,currentProfit,self.profit,totolAsset)
+        print(str)
+        self.exeInfo+= str
+
         priceinfoLastUpadte=self.db.get_lastuptate_time()
         tradeinfo={}
         tradeinfo['TIME']=priceinfoLastUpadte
@@ -156,6 +191,7 @@ class TraderBot(Observer):
         tradeinfo['SELL_AMOUNT']=volume
         tradeinfo['CUR_PROFIT']=float(format(currentProfit,'.2f'))
         tradeinfo['TOTOL_PROFIT']=float(format(self.profit,'.2f'))
+        tradeinfo['EXE_STATE']=int(exe_state)
         self.db.update_tradeinfo(tradeinfo)
     def getTotalprofit(self):
         return self.exeInfo

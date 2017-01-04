@@ -493,8 +493,8 @@ class Arbitrer(object):
         priceinfo={}
         priceinfo['time']=tickData['HuobiCNY']['time']
         priceinfo['cur_logtime']=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        priceinfo['hbprice'] = float(tickData['OKCoinCNY']['ticker']['last'])
-        priceinfo['okprice'] = float(tickData['HuobiCNY']['ticker']['last'])
+        priceinfo['hbprice'] = float(tickData['HuobiCNY']['ticker']['last'])
+        priceinfo['okprice'] = float(tickData['OKCoinCNY']['ticker']['last'])
         priceinfo['hb_btc']=self.clientBalance['HuobiCNY']['btc']
         priceinfo['hb_asset']=float(format(self.clientBalance['HuobiCNY']['asset'],'.2f'))
         priceinfo['ok_btc']=self.clientBalance['OKCoinCNY']['btc']
@@ -525,7 +525,7 @@ class Arbitrer(object):
                 for observer in self.observers:
                     if observer.get_observer_name()=='TraderBot':
                         observer.update_balance()
-                        self.clientBalance = observer.get_client_balance()         
+                        self.clientBalance = observer.get_client_balance()       
                 self.depths = self.update_depths()
                 if self.dumpTickDepth:
                     tmpTickDepthData={'tick':tmpTickData,'depth':self.depths}

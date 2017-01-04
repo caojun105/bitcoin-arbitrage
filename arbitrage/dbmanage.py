@@ -41,7 +41,8 @@ class dbmanage(metaclass=Singleton):
                                             BUY_PLANPRICE float,
                                             SELL_PLANPRICE float,
                                             CUR_PROFIT float,
-                                            TOTOL_PROFIT float
+                                            TOTOL_PROFIT float,
+                                            EXE_STATE INT
                                      );"""
         self.conn.execute(sql_create_priceinfo_tbl)
         self.conn.execute(sql_create_tradeinfo_tbl)
@@ -60,7 +61,7 @@ class dbmanage(metaclass=Singleton):
                          (tick['time'],tick['cur_logtime'],tick['okprice'],tick['hbprice'],tick['hb_btc'],tick['hb_asset'],tick['ok_btc'],tick['ok_asset'],tick['totoal_asset'],tick['low_offset'],tick['high_offset']))
         self.lastupdate=tick['time']
     def update_tradeinfo(self,tradeinfo):
-          self.cur.execute("""INSERT INTO TRADEINFO (TIME,CUR_LOGTIME,ASK_MARKET,BID_MARKET,BUY_PRICE,BUY_AMOUNT,SELL_PRICE,SELL_AMOUNT,BUY_PLANPRICE,SELL_PLANPRICE,CUR_PROFIT,TOTOL_PROFIT) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",\
-                         (tradeinfo['TIME'],tradeinfo['CUR_LOGTIME'],tradeinfo['ASK_MARKET'],tradeinfo['BID_MARKET'],tradeinfo['BUY_PRICE'],tradeinfo['BUY_AMOUNT'],tradeinfo['SELL_PRICE'],tradeinfo['SELL_AMOUNT'],tradeinfo['BUY_PLANPRICE'],tradeinfo['SELL_PLANPRICE'],tradeinfo['CUR_PROFIT'],tradeinfo['TOTOL_PROFIT']))
+          self.cur.execute("""INSERT INTO TRADEINFO (TIME,CUR_LOGTIME,ASK_MARKET,BID_MARKET,BUY_PRICE,BUY_AMOUNT,SELL_PRICE,SELL_AMOUNT,BUY_PLANPRICE,SELL_PLANPRICE,CUR_PROFIT,TOTOL_PROFIT,EXE_STATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",\
+                         (tradeinfo['TIME'],tradeinfo['CUR_LOGTIME'],tradeinfo['ASK_MARKET'],tradeinfo['BID_MARKET'],tradeinfo['BUY_PRICE'],tradeinfo['BUY_AMOUNT'],tradeinfo['SELL_PRICE'],tradeinfo['SELL_AMOUNT'],tradeinfo['BUY_PLANPRICE'],tradeinfo['SELL_PLANPRICE'],tradeinfo['CUR_PROFIT'],tradeinfo['TOTOL_PROFIT'],tradeinfo['EXE_STATE']))
     def get_lastuptate_time(self):
         return self.lastupdate
